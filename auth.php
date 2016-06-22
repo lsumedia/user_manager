@@ -1,6 +1,6 @@
 <?php
 
-require_once('init.php');
+require_once('app/init.php');
 
 if(isset($_GET['request_login_token'])){
     /* Generate login token for requesting an authentication token */

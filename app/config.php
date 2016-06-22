@@ -2,11 +2,15 @@
 
 $config = [
     
-    'db_name' => '',
-    'db_server' => '',
-    'db_user' => '',
-    'db_pass' => '',
-     
+    /* Database configuration */
+    'database' => [
+        'db_name' => '',
+        'db_server' => '',
+        'db_user' => '',
+        'db_pass' => ''
+    ],
+    
+    
 ];
 
 
