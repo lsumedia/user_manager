@@ -25,8 +25,8 @@
  */
 
 
-function process_password($password, $salt){
-    return hash('SHA256', $password . $salt);
+function process_password($password){
+    return hash('SHA256', $password);
 }
 
 class user{
@@ -39,19 +39,23 @@ class user{
    
     private $password_hash;
     
-    private $password_salt;
-    
     private $permissions;
+    
+    /** 
+     * 
+     * @param type $username_or_email - Username or email of the targeted user
+     * 
+     * @return user if user found, false if not
+     */
+    public function __construct($username_or_email) {
+        
+    }
     
     public function check_password($password){
         if($this->password_hash === process_password($password, $this->salt)){
             return true;
         }
         return false;
-    }
-    
-    public static function get_user($username_or_email){
-        
     }
     
     public function has_permission($perm_name){
@@ -67,5 +71,24 @@ class user{
     
     public function remove_permission($perm_name){
         
+    }
+    
+    /**
+     * new_user
+     * 
+     * Static function to make a new user
+     * @returns user User
+     */
+     public static function new_user($username, $email, $password, $fullname = null, $bio = null, $dpurl = null){
+         
+        //Hash password
+        $password_hash = process_password($password);
+        
+        //Write new user to database
+        
+        //Get object for new user
+        
+        //Add default permissions
+         
     }
 }

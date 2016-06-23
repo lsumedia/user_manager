@@ -4,6 +4,7 @@ require('app/init.php');
 
 $page_loader = new page_loader();
 
+
 if(isset($_GET['p'])){
     $page_id = $_GET['p'];
 }else{

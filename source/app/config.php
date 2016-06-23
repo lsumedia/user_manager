@@ -17,6 +17,13 @@ $config = [
     ],
     
     
+    'registration' => [
+        /* Allow anyone to register */
+        'open_registration' => false,
+        /* Require users to confirm their email */
+        'require_email_confirmation' => false,
+    ],
+    
 ];
 
 
@@ -24,12 +31,13 @@ $config = [
 
 $permissions = [
     
+    /* Permission to manage users. Do not remove this permission! */
     'manage_users' => 'Manage user permissions',
     
     /* Media manager */
     
     'upload_media' => 'Media: Upload media',
-    'edit_media' => 'Media: Upload media',
+    'edit_media' => 'Media: Edit media',
     
     /* LCR */
     
@@ -41,7 +49,7 @@ $permissions = [
     
     'lsutv_submit_content' => 'LSUTV: Submit content',
     'lsutv_edit_content' => 'LSUTV: Edit content',
-    'lsutv_manage_channels' => 'LSUTV: Manage channels',
+    'lsutv_manage_channels' => 'LSUTV: Broadcast Control Room',
     
     /* Lens */
     
