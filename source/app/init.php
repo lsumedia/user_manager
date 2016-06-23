@@ -2,10 +2,22 @@
 
 /* init.php
  * 
- * Should be included on all pages which require access to the model
+ * Should be included on all pages which require access to the model and database
  */
 
+
+//Load configuration
+
 require_once('app/config.php');
+
+//Load database connection
+
+$db_settings = $config['database'];
+$db = new mysqli($db_settings['db_host'], $db_settings['db_user'], $db_settings['db_pass'], $db_settings['db_name']);
+
+if($db->connect_error){
+    echo 'Initialisation error: ' . $db->connect_error;
+}
 
 $dir = 'app/components';
 

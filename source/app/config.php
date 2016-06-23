@@ -4,10 +4,16 @@ $config = [
     
     /* Database configuration */
     'database' => [
-        'db_name' => '',
-        'db_server' => '',
-        'db_user' => '',
-        'db_pass' => ''
+        /* Prefix appended to all table names */
+        'db_prefix' => 'mu',
+        /* Database name */
+        'db_name' => 'grovestr_media_user_manager',
+        /* Database server */
+        'db_host' => 'luna.servers.prgn.misp.co.uk',
+        /* Database user name */
+        'db_user' => 'grovestr_media',
+        /* Database user password */
+        'db_pass' => 'i<3media16'
     ],
     
     
