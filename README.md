@@ -1,2 +1,3 @@
 # user_manager
-Single-sign-on and OAuth authenticaion provider for Media websites
+Single-sign-on provider for Media websites.
+

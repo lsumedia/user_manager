@@ -33,15 +33,19 @@ class page_loader{
     }
 
     function load_content(){
-        try{
-            $this->page->content();
-        }catch(Exception $e){
-            echo "Error loading page: $e";
+        if($this->page == null){
+            echo "Error - no page loaded";
+            return;
         }
+        $this->page->content();
         //call_user_func(array($this->page, 'content'));
     }
 
     function load_header(){
+        if($this->page == null){
+            echo "Error - no page loaded";
+            return;
+        }
         $this->page->header_content();
         //call_user_func(array($this->page, 'header_content'));
     }
