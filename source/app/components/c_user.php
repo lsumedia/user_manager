@@ -80,6 +80,9 @@ class user{
      * @returns user User
      */
      public static function new_user($username, $email, $password, $fullname = null, $bio = null, $dpurl = null){
+        global $db;
+        global $default_permissions;
+         
          
         //Hash password
         $password_hash = process_password($password);
@@ -89,6 +92,10 @@ class user{
         //Get object for new user
         
         //Add default permissions
+        
+        foreach($default_permissions as $d_perm){
+            //add $d_perm
+        }
          
     }
 }

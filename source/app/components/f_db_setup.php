@@ -14,7 +14,7 @@ class db_model{
     
         //group permission
         
-        //add default user
+        //access keys
         
     }
 
@@ -25,6 +25,10 @@ class db_model{
      * on load and notify the user if the configuration is wrong
      */
     public function check_configuration(){
+        
+        /* Tests the database table by table. Potentially kinda slow, so should not
+         * be run if the active user is logged in.
+         */
         
         $user_query = "SHOW TABLES LIKE " . prefix('user');
         
@@ -40,6 +44,8 @@ class db_model{
         
         $group_perm_query = "SHOW TABLES LIKE " . prefix('group_permission');
         
+        
+        $access_key_query = "SHOW TABLES LIKE " . prefix('access_key');
         
     }
     

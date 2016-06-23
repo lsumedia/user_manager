@@ -20,7 +20,7 @@ $config = [
     'registration' => [
         /* Allow anyone to register */
         'open_registration' => false,
-        /* Require users to confirm their email */
+        /* Require users to confirm their email before logging in */
         'require_email_confirmation' => false,
     ],
     
@@ -65,7 +65,7 @@ $permissions = [
 
 
 /* Default permissions a user has on creation */
-$default_pemissions = [
+$default_permissions = [
     'upload_media',
     'lcr_submit_content',
     'lsutv_submit_content',
