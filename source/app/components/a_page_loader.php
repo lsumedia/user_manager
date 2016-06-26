@@ -34,7 +34,7 @@ class page_loader{
 
     function load_content(){
         if($this->page == null){
-            echo "Error - no page loaded";
+            echo "No page object loaded!";
             return;
         }
         $this->page->content();
@@ -43,10 +43,17 @@ class page_loader{
 
     function load_header(){
         if($this->page == null){
-            echo "Error - no page loaded";
+            echo "No page object loaded!";
             return;
         }
         $this->page->header_content();
         //call_user_func(array($this->page, 'header_content'));
+    }
+    
+    function current_page_name(){
+        if($this->page == null){
+            return "Error - Page not found";
+        }
+        return $this->page->title;
     }
 }

@@ -1,0 +1,7 @@
+Components directory prefixes
+
+a_ : initial functions
+c_ : classes/models
+f_ : general function
+p_ : pages/views
+r_ : controllers

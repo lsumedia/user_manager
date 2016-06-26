@@ -24,6 +24,8 @@
  * THE SOFTWARE.
  */
 
+/* Users model */
+
 
 function process_password($password){
     return hash('SHA256', $password);
