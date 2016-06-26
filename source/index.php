@@ -1,5 +1,14 @@
 <?php
 
+if(0 || isset($_GET['debug'])){	//Error reporting - disable for production
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
+}else{
+    ini_set('display_errors', '0');     # don't show any errors...
+    error_reporting(E_ALL | E_STRICT);  # ...but do log them
+}
+
 require('app/init.php');
 
 $page_loader = new page_loader();
@@ -20,9 +29,9 @@ $page_loader->load_page_by_name($page_id);
         <link rel="stylesheet" href="css/bootstrap.min.css" />
         <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
         <link rel="stylesheet" href="css/main.css" />
-         
         
         
+        <?php js_import(); ?>
     </head>
     
     <body>
@@ -49,12 +58,13 @@ $page_loader->load_page_by_name($page_id);
       </div>
     </nav>
 
-        <main class="container-fluid">
-        <?php $page_loader->load_content(); ?>
-        </main
-        
-        <script src="js/jquery-3.0.0.min.js" ></script>
-        <script src="js/bootstrap.min.js"></script>
+        <main class="container">
+            <div class="page-header">
+                <h1><?= $page_loader->current_page_name() ?></h1>
+            </div>
+            
+            <?php $page_loader->load_content(); ?>
+        </main>
         
     </body>
 </html>
