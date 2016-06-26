@@ -26,6 +26,7 @@ $page_loader->load_page_by_name($page_id);
     <head>
         <title>LSU Media User Manager</title>
         
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="css/bootstrap.min.css" />
         <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
         <link rel="stylesheet" href="css/main.css" />
