@@ -1,0 +1,6 @@
+#DirectoryIndex login.php
+RewriteEngine on
+RewriteRule login index.php?p=login
+RewriteRule login?redirect=% index.php?p=login&r=%
+RewriteRule register index.php?p=register
+RewriteRule profile index.php?p=profile
