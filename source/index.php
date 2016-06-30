@@ -11,6 +11,9 @@ error_reporting(-1);
 
 require('app/init.php');
 
+
+
+
 $page_loader = new page_loader();
 
 if(isset($_GET['p'])){

@@ -1,5 +1,8 @@
 <?php
 
+
+/* Requests to this file should ONLY be made by server-side applications */
+
 require_once('app/init.php');
 
 if(isset($_GET['request_login_token'])){
@@ -14,7 +17,8 @@ if(isset($_GET['request_login_token'])){
     $token_hash = $_POST['token_hash'];
     
 }else if(isset($_GET['validate_access_key'])){
-    /* Check if an access key is valid */
+    /* Check if an access key is valid
+    (calling this from client side is pointless */
     $key_string = $_POST['key_string'];
     
 }else if(isset($_GET['check_user_permission'])){
