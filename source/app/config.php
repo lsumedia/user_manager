@@ -25,7 +25,7 @@ $config = [
     ],
     
     /* Dashboard to redirect to if no login redirect provided */
-    'dashboard_address' => 'http://smalldisasters.co.uk/live/admin',
+    'dashboard_address' => '',
     
 ];
 
