@@ -1,7 +1,7 @@
 <?php
 
 /* 
- * The MIT License
+ * request_login.php
  */
 
 require_once('app/init.php');
@@ -16,10 +16,16 @@ switch($action){
         
         $username = $_POST['username'];
         $password = $_POST['password'];
+        $redirect = $_POST['redirect'];
         
-        $response['key'] = 'Yale';
+        if($username = 'break'){
+            header('location:./auth/?p=login&error');
+        }
+        
+        if(strlen($redirect) < 1){
+            header('location:' . $config['dashboard_address'] . '?key=5');
+        }
+        echo $redirect;
         break;
     
 }
-
-echo json_encode($response);

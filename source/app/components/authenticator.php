@@ -23,22 +23,26 @@ class authenticator{
     
     public static $config = [
         /* Authentication server address (Link to auth.php), no trailing slash */
-        'server_address' => 'http://grovestreet.me/projects/user_manager/auth.php',
+        'server_address' => 'http://grovestreet.me/projects/user_manager/source/auth.php',
         
         /* Address of login page to redirect to if key fails */
-        'login_page_address' => 'auth/?p=login',
+        'login_page_address' => 'http://grovestreet.me/projects/user_manager/source/auth/?p=login',
+        
+        /* Address of logout page (for logout button) */
+        'logout_page_address' => 'http://grovestreet.me/projects/user_manager/source/auth/?p=logout',
+        
         
         /* Prefix for session variables (Should be different for multiple sites 
          * on the same server & domain */
         'session_prefix' => 'm_users',
     ];
     
-    /*
-    public function __construct() {
-        
-    }*/
     
-    public function check_session_key(){
+    public function __construct() {
+        session_start();
+    }
+    
+    public function check_login(){
         
         $config = self::$config;
         
@@ -56,7 +60,7 @@ class authenticator{
             
         }
         
-        if($this->get_session_key() == false){
+        if($this->get_session_key() == false || $this->get_session_key() != 5){
             /* Redirect to login page if no valid key set */
             $this->redirect_to_login();
             /* Ensure function is broken, even though script should die */
@@ -77,6 +81,12 @@ class authenticator{
         
     }
     
+    /**
+     * server_check_permission - liase with the server to see if the 
+     * user has a given permission
+     * 
+     * @param string $permission - permission name to check for 
+     */
     public function server_check_permission($permission){
        
         $config = self::$config;
@@ -86,7 +96,10 @@ class authenticator{
         
     }
     
-    
+    /**
+     * server_kill_key - liase with the server to invalidate the user's key
+     * (logout operation)
+     */
     public function server_kill_key(){
         
         $config = self::$config;
@@ -139,6 +152,35 @@ class authenticator{
         
         header('location:' . $config['login_page_address'] . '&redirect=' . $current);
         die();
+    }
+    
+    /**
+     * status_bug
+     * 
+     * Displays a small notice on the page which displays current login information
+     * and a sign out button
+     */
+    public function status_bug(){
+        $config = self::$config;
+        $sess_prefix = $config['session_prefix'];
+        ?>
+<style>
+    #<?= $sess_prefix ?>_bug{
+        background-color:white;
+        width:300px;
+        height:65px;
+        position:fixed;
+        bottom:50px;
+        right:50px;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    }
+</style>
+<div id="<?= $sess_prefix ?>_bug" class="<?= $sess_prefix ?>_bug">
+    <?= $this->key ?>
+    <p><a href="<?= $config['logout_page_address'] . '&key=' . $this->key ?>">Logout</a></p>
+</div>        
+<?php
+        
     }
     
 }

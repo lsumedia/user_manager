@@ -12,10 +12,9 @@ error_reporting(-1);
 require('app/init.php');
 
 $auth = new authenticator();
-$auth->check_session_key();
+$auth->check_login();
 
-echo $_SESSION['key'];
-
+$auth->get_session_key();
 
 $page_loader = new page_loader();
 
@@ -72,5 +71,7 @@ $page_loader->load_page_by_name($page_id);
             <?php $page_loader->load_content(); ?>
         </main>
         
+        <?php $auth->status_bug() ?>
+       
     </body>
 </html>
