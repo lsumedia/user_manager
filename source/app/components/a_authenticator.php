@@ -1,19 +1,35 @@
 <?php
 
 /* 
- * Authenticate Plugin
+ * Authenticator Plugin
+ * 
+ * This class is standalone and can be placed anywhere it is needed 
+ * - just make sure to adjust the configuration!
+ * 
  */
+
+/* This bit from StackOverflow, gotta be honest */
+function strleft($s1, $s2) { return substr($s1, 0, strpos($s1, $s2)); }
+
+ function current_page_url() 
+{ 
+    $s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : ""; 
+    $protocol = strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/").$s; 
+    $port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]); 
+    return $protocol."://".$_SERVER['SERVER_NAME'].$port.$_SERVER['REQUEST_URI']; 
+} 
 
 class authenticator{
     
     public static $config = [
-        /* Authentication server address */
-        'server_address' => 'auth/ajax.php',
+        /* Authentication server address (Link to auth.php), no trailing slash */
+        'server_address' => 'http://grovestreet.me/projects/user_manager/auth.php',
         
         /* Address of login page to redirect to if key fails */
-        'login_page_address' => 'auth/login',
+        'login_page_address' => 'auth/?p=login',
         
-        /* Prefix for session variables */
+        /* Prefix for session variables (Should be different for multiple sites 
+         * on the same server & domain */
         'session_prefix' => 'm_users',
     ];
     
@@ -30,11 +46,11 @@ class authenticator{
         
         
         //Set or overwrite session stored key
-        if($key = get_url_key()){ 
+        if($key = $this->get_url_key()){ 
             
             $this->set_session_key($key);
             
-        }else if($key = get_post_key()){
+        }else if($key = $this->get_post_key()){
             
             $this->set_session_key($key);
             
@@ -117,7 +133,11 @@ class authenticator{
     
     public function redirect_to_login(){
         $config = self::$config;
-        header('location:' . $config['login_page_address']);
+        
+        /* Send current page URL in address to ensure the user can get back here */
+        $current = current_page_url();
+        
+        header('location:' . $config['login_page_address'] . '&redirect=' . $current);
         die();
     }
     
