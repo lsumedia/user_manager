@@ -1,11 +1,15 @@
 <html>
     <head>
         <title>LSU Media SSO</title>
+        <link rel="stylesheet" href="../css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../css/bootstrap-theme.min.css" />
         <link rel="stylesheet" href="css/style.css" />
+        
+        <script src="../js/bootstrap.min.js" ></script>
     </head>  
     <body>
         <nav>
-            <img src="res/media_logo.png" alt="Media Logo" />
+            <!-- <img src="res/media_logo.png" alt="Media Logo" /> -->
             <p>Single-Sign-On</p>
         </nav>
         <main>

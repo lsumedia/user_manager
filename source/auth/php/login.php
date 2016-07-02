@@ -10,6 +10,8 @@ $return = $_GET['redirect'];
 /* Symbol to use for URL variable */
 $u_v = (strpos($return, "?") == false)? '?' : '&';
 
+$return_full = $return . $u_v . "key=" ;
+
 //echo "<a href=\"{$return}{$u_v}key=5\">$return</a>"; 
 
 

@@ -60,7 +60,7 @@ class authenticator{
             
         }
         
-        if($this->get_session_key() == false || $this->get_session_key() != 5){
+        if($this->get_session_key() == false){
             /* Redirect to login page if no valid key set */
             $this->redirect_to_login();
             /* Ensure function is broken, even though script should die */
@@ -154,6 +154,10 @@ class authenticator{
         die();
     }
     
+    public function logout_url(){
+        return self::$config['logout_page_address'] . '&key=' . $this->key . '&source=' . current_page_url();
+    }
+    
     /**
      * status_bug
      * 
@@ -176,8 +180,8 @@ class authenticator{
     }
 </style>
 <div id="<?= $sess_prefix ?>_bug" class="<?= $sess_prefix ?>_bug">
-    <?= $this->key ?>
-    <p><a href="<?= $config['logout_page_address'] . '&key=' . $this->key ?>">Logout</a></p>
+    <p><a href="<?= $this->logout_url() ?>">Logout</a></p>
+    <p><?= $this->key ?></p>
 </div>        
 <?php
         
