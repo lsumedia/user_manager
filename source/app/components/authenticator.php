@@ -19,8 +19,8 @@ class authenticator{
         'session_prefix' => 'm_users',
         
         /* (Optional) If set, users will be redirected to this address after login
-        instead of the original requested page */
-        'custom_redirect' => '//google.co.uk'
+        instead of the original requested page. Should be null if not used. */
+        'custom_redirect' => null
     ];
     
     private function config(){
