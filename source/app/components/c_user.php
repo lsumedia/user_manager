@@ -124,12 +124,14 @@ class user{
      * Returns list of permissions for use in an ajax_list
      */
     public function list_permissions(){
+        global $permissions;
+        
         $list = $this->permissions;
         
         $clean = [];
         
         foreach($list as $item){
-            $clean[] = ['Permission name' => $item];
+            $clean[] = ['Permission' => $permissions[$item]];
         }
         
         return $clean;
@@ -176,3 +178,4 @@ class user{
         return $clean;
     }
 }
+

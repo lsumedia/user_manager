@@ -8,17 +8,6 @@
  * 
  */
 
-/* This bit from StackOverflow, gotta be honest */
-function strleft($s1, $s2) { return substr($s1, 0, strpos($s1, $s2)); }
-
- function current_page_url() 
-{ 
-    $s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : ""; 
-    $protocol = strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/").$s; 
-    $port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]); 
-    return $protocol."://".$_SERVER['SERVER_NAME'].$port.$_SERVER['REQUEST_URI']; 
-} 
-
 class authenticator{
     
     public static $config = [
@@ -28,6 +17,10 @@ class authenticator{
         /* Prefix for session variables (Should be different for multiple sites 
          * on the same server & domain */
         'session_prefix' => 'm_users',
+        
+        /* (Optional) If set, users will be redirected to this address after login
+        instead of the original requested page */
+        'custom_redirect' => '//google.co.uk'
     ];
     
     private function config(){
@@ -154,18 +147,27 @@ class authenticator{
         return false;
     }
     
+    public function redirect_url(){
+        if(isset(self::$config['custom_redirect'])){
+            return self::$config['custom_redirect'];
+        }else{
+            return current_page_url();
+        }
+    }
+    
     public function redirect_to_login(){
         $config = $this->config();
         
         /* Send current page URL in address to ensure the user can get back here */
-        $current = urlencode(current_page_url());
+        $current = urlencode($this->redirect_url());
         
         header('location:' . $config['login_page_address'] . '&redirect=' . $current);
         die();
     }
     
+    
     public function logout_url(){
-        return $this->config()['logout_page_address'] . '&key=' . $this->key . '&source=' . urlencode(current_page_url());
+        return $this->config()['logout_page_address'] . '&key=' . $this->key . '&source=' . urlencode($this->redirect_url());
     }
     
     /**
@@ -199,3 +201,14 @@ class authenticator{
     }
     
 }
+
+/* This bit from StackOverflow, gotta be honest */
+function strleft($s1, $s2) { return substr($s1, 0, strpos($s1, $s2)); }
+
+ function current_page_url() 
+{ 
+    $s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : ""; 
+    $protocol = strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/").$s; 
+    $port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]); 
+    return $protocol."://".$_SERVER['SERVER_NAME'].$port.$_SERVER['REQUEST_URI']; 
+} 
