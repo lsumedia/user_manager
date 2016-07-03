@@ -9,12 +9,22 @@ class users_page extends page{
     
     public function content() {
 
-    $array = [];
-    $array[] = ['Name' => 'Bob'];
-    $array[] = ['Name' => 'Stephanie'];
-    
-    $list = new ajax_list($array,'userlist');
-    $list->display();
+        if(isset($_GET['id'])){
+            
+            $c_user = new user($_GET['id']);
+            
+            $list = new ajax_list($c_user->list_permissions(), 'perm_list');
+            $list->display();
+            
+            
+        }else{
+
+            $list = new ajax_list(user::list_all(), 'user_list');
+            $list->display();
+
+            $test_user = new user('test');
+            var_dump($test_user->all_permissions());
+        }
     
     }
     

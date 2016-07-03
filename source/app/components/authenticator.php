@@ -22,20 +22,21 @@ function strleft($s1, $s2) { return substr($s1, 0, strpos($s1, $s2)); }
 class authenticator{
     
     public static $config = [
-        /* Authentication server address (Link to auth.php), no trailing slash */
-        'server_address' => 'http://grovestreet.me/projects/user_manager/source/auth.php',
-        
-        /* Address of login page to redirect to if key fails */
-        'login_page_address' => 'http://grovestreet.me/projects/user_manager/source/auth/?p=login',
-        
-        /* Address of logout page (for logout button) */
-        'logout_page_address' => 'http://grovestreet.me/projects/user_manager/source/auth/?p=logout',
-        
+        /* Authentication server root folder with trailing slash */
+        'server_root' => 'http://grovestreet.me/projects/user_manager/source/',
         
         /* Prefix for session variables (Should be different for multiple sites 
          * on the same server & domain */
         'session_prefix' => 'm_users',
     ];
+    
+    private function config(){
+        $config = self::$config;
+        $config['server_address'] = $config['server_root'] . 'auth.php';
+        $config['login_page_address'] = $config['server_root'] . 'auth/?p=login';
+        $config['logout_page_address'] = $config['server_root'] . 'auth/?p=logout';
+        return $config;
+    }
     
     
     public function __construct() {
@@ -44,7 +45,7 @@ class authenticator{
     
     public function check_login(){
         
-        $config = self::$config;
+        $config = $this->config();
         
         $sess_prefix = $config['session_prefix'];
         
@@ -67,14 +68,16 @@ class authenticator{
             return false;
         }
         
-        
-        
+        /* If session key invalid, not registered or timed out */
+        if(false || isset($_GET['logout'])){
+            $this->clear_session_key();
+        }
         
     }
     
     public function server_check_key(){
         
-        $config = self::$config;
+        $config = self::$confiselfg;
         $srv_addr = $config['server_address'];
         
         $api_url = $srv_addr . '?action=validate&key=' . $this->key();
@@ -89,7 +92,7 @@ class authenticator{
      */
     public function server_check_permission($permission){
        
-        $config = self::$config;
+        $config = $this->config();
         $srv_addr = $config['server_address'];
         
         $api_url = $srv_addr . '?action=check_perm&key=' . $this->key() . '&perm=' . $permission;
@@ -102,7 +105,7 @@ class authenticator{
      */
     public function server_kill_key(){
         
-        $config = self::$config;
+        $config = $this->config();
         $srv_addr = $config['server_address'];
         
         $api_url = $srv_addr . '?action=invalidate&key=' . $this->key();
@@ -111,13 +114,13 @@ class authenticator{
     
     
     public function set_session_key($key){
-        $config = self::$config;
+        $config = $this->config();
         $sess_prefix = $config['session_prefix'];
         $_SESSION[$sess_prefix . '_key'] = $key;
     }
     
     public function get_session_key(){
-        $config = self::$config;
+        $config = $this->config();
         $sess_prefix = $config['session_prefix'];
         if(isset($_SESSION[$sess_prefix . '_key'])){
             $key = $_SESSION[$sess_prefix . '_key'];
@@ -125,6 +128,13 @@ class authenticator{
             return $key;
         }
         return false;
+    }
+    
+    public function clear_session_key(){
+        $config = $this->config();
+        $sess_prefix = $config['session_prefix'];
+        $_SESSION[$sess_prefix . '_key'] = null;
+        unset($_SESSION[$sess_prefix . '_key']);
     }
     
     
@@ -145,17 +155,17 @@ class authenticator{
     }
     
     public function redirect_to_login(){
-        $config = self::$config;
+        $config = $this->config();
         
         /* Send current page URL in address to ensure the user can get back here */
-        $current = current_page_url();
+        $current = urlencode(current_page_url());
         
         header('location:' . $config['login_page_address'] . '&redirect=' . $current);
         die();
     }
     
     public function logout_url(){
-        return self::$config['logout_page_address'] . '&key=' . $this->key . '&source=' . current_page_url();
+        return $this->config()['logout_page_address'] . '&key=' . $this->key . '&source=' . urlencode(current_page_url());
     }
     
     /**
@@ -165,21 +175,22 @@ class authenticator{
      * and a sign out button
      */
     public function status_bug(){
-        $config = self::$config;
+        $config = $this->config();
         $sess_prefix = $config['session_prefix'];
         ?>
 <style>
-    #<?= $sess_prefix ?>_bug{
+    .authenticator_logout_main{
         background-color:white;
         width:300px;
         height:65px;
+        overflow:hidden;
         position:fixed;
         bottom:50px;
         right:50px;
         box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
     }
 </style>
-<div id="<?= $sess_prefix ?>_bug" class="<?= $sess_prefix ?>_bug">
+<div class="authenticator_logout_main" id="<?= $sess_prefix ?>_bug">
     <p><a href="<?= $this->logout_url() ?>">Logout</a></p>
     <p><?= $this->key ?></p>
 </div>        

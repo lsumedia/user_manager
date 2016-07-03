@@ -34,7 +34,7 @@ function list_get_data(dataLocation){
 function rowCode(row){
     var html = '';
     if(row['action']){
-        var action = "?action=" + row['action'];
+        var action = row['action'];
     }else{
         var action = false;
     }

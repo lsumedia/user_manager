@@ -4,6 +4,12 @@
  * request_login.php
  */
 
+/* Debugging settings *//*
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
+*/
+
 require_once('app/init.php');
 
 $response = array();
@@ -18,10 +24,24 @@ switch($action){
         $password = $_POST['password'];
         $redirect = $_POST['redirect'];
         
-        if($username == 'break'){
+        $hash = process_password($password);
+        
+        $query = "SELECT username FROM " . prefix('user') . " WHERE (username=? OR email=?) AND password=?";
+        
+        $stmt = $db->prepare($query);
+        $stmt->bind_param('sss',$username,$username,$hash);
+        $stmt->execute();
+        
+        $stmt->bind_result($safe_username);
+        
+        if($stmt->fetch()){
+            //make key
+        }else{
             header('location:./auth/?p=login&error&redirect=' . $redirect);
             die();
         }
+        
+        $stmt->close();
         
         $key = sha1(time());
         
@@ -46,8 +66,10 @@ switch($action){
         break;
     case 'logout':
         
-        $key = $_POST['key'];
+        $key = $_POST['key'];       
         $redirect = $_POST['source'];
+        
+        /* Destroy key operation */
         
         header('location:./auth/?p=login&redirect=' . $redirect);
         die();
