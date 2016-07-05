@@ -58,10 +58,11 @@ class access_key{
            
            /* Reject keys that have timed out */
            
-           $update_ts_query = "UPDATE " . prefix('key') . " WHERE key_id='{$key_id}' ";
+           $gd_s->close();
            
-           $db->query($update_ts_query);
+           $update_ts_query = "UPDATE " . prefix('key') . " SET last_used = null WHERE key_id=$key_id";
            
+           $res = $db->query($update_ts_query);
            return true;
        }
        
@@ -142,5 +143,12 @@ class access_key{
         }
         echo "Error - nothing happened!";
         return false;
+    }
+    
+    public static function list_all($limit = "50"){
+        global $db;
+        
+        $sel_query = "SELECT username, last_used, ";
+        
     }
 }
