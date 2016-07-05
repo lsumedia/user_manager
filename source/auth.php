@@ -1,33 +1,43 @@
 <?php
 
+
+/* Requests to this file should ONLY be made by server-side applications 
+ * 
+ * Please ONLY use the Authenticator class to interact with this API!
+ * 
+ */
+
+/* Debugging settings *//*
+ini_set('display_errors',1);
+ini_set('display_startup_errors',1);
+error_reporting(-1);
+*/
+
 require_once('app/init.php');
 
-if(isset($_GET['request_login_token'])){
-    /* Generate login token for requesting an authentication token */
+if(isset($_GET['check_key'])){
+    /* Check if an access key is valid
+    (calling this from client side is pointless */
+    $key_string = $_GET['key'];
+    $ip = $_GET['ip'];
     
-    $username = $_POST['username'];
+    if(access_key::validate($key_string,$ip)){
+        $response = ['valid' => true, "key" => $key_string];
+    }else{
+        $response = ['valid' => false, "key" => $key_string];
+    }
     
-}else if(isset($_GET['request_access_key'])){
-    /* Request access key and generate one if the request is valid */
-    
-    $token_id = $_POST['token_id'];
-    $token_hash = $_POST['token_hash'];
-    
-}else if(isset($_GET['validate_access_key'])){
-    /* Check if an access key is valid */
-    $key_string = $_POST['key_string'];
-    
-}else if(isset($_GET['check_user_permission'])){
+}else if(isset($_GET['check_perm'])){
     /* Check if the user owning the access key has a given permission */
     
-    $key_string = $_POST['key_string'];
-    $perm_name = $_POST['perm_name'];
+    $key_string = $_GET['key_string'];
+    $perm_name = $_GET['perm_name'];
     
-}else if(isset($_GET['kill_access_key'])){
-    /* Invalidate an access key (log out) */
+}else if(isset($_GET['user_profile'])){
     
-    $key_string = $_POST['key_string'];
-    
+    $key_string = $_GET['username'];
 }
+
+echo json_encode($response);
 
 

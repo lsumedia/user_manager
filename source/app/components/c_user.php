@@ -39,6 +39,10 @@ class user{
     
     public $email;
    
+    public $bio;
+    
+    public $dp_url;
+    
     private $password_hash;
     
     private $permissions;
@@ -50,11 +54,46 @@ class user{
      * @return user if user found, false if not
      */
     public function __construct($username_or_email) {
+        global $db;
+        
+        $query = "SELECT username, fullname, email, bio, dp_url, password FROM " . prefix('user') . " WHERE (username=? OR email=?)";
+        
+        $stmt = $db->prepare($query);
+        $stmt->bind_param('ss',$username_or_email, $username_or_email);
+        $stmt->execute();
+        
+        $stmt->bind_result($un, $fn, $em, $bio, $dp, $pw);
+        
+        if($stmt->fetch()){
+            $this->username = $un;
+            $this->fullname = $fn;
+            $this->email = $em;
+            $this->bio = $bio;
+            $this->dp_url = $dp;
+            $this->password_hash = $pw;
+        }else{
+            throw new Exception("User not found");
+        }
+        
+        $stmt->close();
+        
+        $perm_query = "SELECT perm_name FROM " . prefix('user_perm') . " WHERE username=?";
+        
+        if($stmt2 = $db->prepare($perm_query)){
+            $stmt2->bind_param('s', $this->username);
+
+            $stmt2->execute();
+            $stmt2->bind_result($perm_name);
+
+            while($stmt2->fetch()){
+                $this->permissions[] = $perm_name;
+            }
+        }
         
     }
     
     public function check_password($password){
-        if($this->password_hash === process_password($password, $this->salt)){
+        if($this->password_hash == process_password($password)){
             return true;
         }
         return false;
@@ -72,7 +111,30 @@ class user{
     }
     
     public function remove_permission($perm_name){
+        $query = "DELETE FROM " . prefix('user_perm') . " WHERE username = ? AND perm_name = ?";
+    }
+    
+    public function all_permissions(){
+        return $this->permissions;
+    }
+    
+    /**
+     * list_permissions
+     * 
+     * Returns list of permissions for use in an ajax_list
+     */
+    public function list_permissions(){
+        global $permissions;
         
+        $list = $this->permissions;
+        
+        $clean = [];
+        
+        foreach($list as $item){
+            $clean[] = ['Permission' => $permissions[$item]];
+        }
+        
+        return $clean;
     }
     
     /**
@@ -100,4 +162,20 @@ class user{
         }
          
     }
+    
+    public static function list_all(){
+        global $db;
+        
+        $query = "SELECT * FROM " . prefix('user');
+        
+        $clean = [];
+        
+        $result = $db->query($query);
+        
+        while($row = $result->fetch_assoc()){
+            $clean[] = ['Username' => $row['username'], 'Full name' => $row['fullname'] , 'Email Address' => $row['email'], 'action' => './?p=users&id=' . $row['username']];
+        }
+        return $clean;
+    }
 }
+

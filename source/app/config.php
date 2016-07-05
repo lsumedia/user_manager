@@ -24,6 +24,9 @@ $config = [
         'require_email_confirmation' => false,
     ],
     
+    /* Dashboard to redirect to if no login redirect provided */
+    'dashboard_address' => '',
+    
 ];
 
 

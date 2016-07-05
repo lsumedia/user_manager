@@ -1,0 +1,5 @@
+#DirectoryIndex login.php
+RewriteEngine off
+RewriteRule login index.php?p=login
+RewriteRule register index.php?p=register
+RewriteRule profile index.php?p=profile

@@ -11,6 +11,11 @@ error_reporting(-1);
 
 require('app/init.php');
 
+$auth = new authenticator();
+$auth->check_login();
+
+$auth->get_session_key();
+
 $page_loader = new page_loader();
 
 if(isset($_GET['p'])){
@@ -67,5 +72,7 @@ $page_loader->load_page_by_name($page_id);
             <?php $page_loader->load_content(); ?>
         </main>
         
+        <?php $auth->status_bug() ?>
+       
     </body>
 </html>
