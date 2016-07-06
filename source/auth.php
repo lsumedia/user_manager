@@ -35,7 +35,13 @@ if(isset($_GET['check_key'])){
     
 }else if(isset($_GET['user_profile'])){
     
-    $key_string = $_GET['username'];
+    $key_string = $_GET['key'];
+    
+    $username = access_key::get_username($key_string);
+    
+    $p_user = new user($username);
+    
+    $response = $p_user;
 }
 
 echo json_encode($response);
