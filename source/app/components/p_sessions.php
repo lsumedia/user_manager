@@ -9,7 +9,7 @@ class sessions_page extends page{
     
     public function content() {
 
-            $list = new ajax_list(user::list_all(), 'user_list');
+            $list = new ajax_list(access_key::list_all_raw(), 'user_list');
             $list->display();
 
             $test_user = new user('test');

@@ -12,22 +12,24 @@
  */
 class access_key{
     
-    public $id;
-    
-    public $key_string;
-    
-    public $username;
-    
-    public $ip_address;
-    
-    public function __construct($key_string){
-        
-    }
-    
     public static function get_username($key_string){
         global $db;
         
+        $query = "SELECT username FROM " . prefix('key') . " WHERE key_value=? LIMIT 1";
         
+        $stmt = $db->prepare($query);
+        
+        $stmt->bind_param('s', $key_string);
+        
+        $stmt->execute();
+        
+        $stmt->bind_result($username);
+        
+        if($stmt->fetch()){
+            return $username;
+        }
+        
+        return false;
     }
     
     public static function validate($key_string, $remote_ip){
@@ -145,10 +147,28 @@ class access_key{
         return false;
     }
     
-    public static function list_all($limit = "50"){
+    /* Array of a request number of keys in raw format */
+    public static function list_all_raw($limit = 50){
         global $db;
         
-        $sel_query = "SELECT username, last_used, ";
+        $sel_query = "SELECT * FROM " . prefix('key') . "  ORDER BY key_id DESC LIMIT ?";
         
+        $stmt = $db->prepare($sel_query);
+        
+        $stmt->bind_param('i', $limit);
+        
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        
+        $clean_results = [];
+        
+        while($row = $result->fetch_assoc()){
+            $clean_results[] = $row;
+        }
+        
+        $stmt->close();
+        
+        return $clean_results;
     }
 }
