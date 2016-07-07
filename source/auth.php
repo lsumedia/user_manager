@@ -17,7 +17,8 @@ require_once('app/init.php');
 
 if(isset($_GET['check_key'])){
     /* Check if an access key is valid
-    (calling this from client side is pointless */
+    (calling this from client side is pointless)
+     * Action also updates access key last_used value */
     $key_string = $_GET['key'];
     $ip = $_GET['ip'];
     
@@ -30,10 +31,27 @@ if(isset($_GET['check_key'])){
 }else if(isset($_GET['check_perm'])){
     /* Check if the user owning the access key has a given permission */
     
-    $key_string = $_GET['key_string'];
+    $key_string = $_GET['key'];
     $perm_name = $_GET['perm_name'];
     
-}else if(isset($_GET['user_profile'])){
+     $key_string = $_GET['key'];
+    
+    try{ 
+        $username = access_key::get_username($key_string);
+    
+        $p_user = new user($username);
+
+        $has_permission = $p_user->has_permission($perm_name);
+
+        $response = ['username' => $username, 'perm_name' => $perm_name, 'has_permission' => $has_permission];
+        
+    }catch(Exception $e){
+        
+        $response = ['error' => "Key is invalid"];
+    }
+    
+}else if(isset($_GET['user_profile'])){ 
+    /* Return user profile data and a list of their permissions */
     
     $key_string = $_GET['key'];
     

@@ -45,7 +45,7 @@ class user{
     
     private $password_hash;
     
-    private $permissions;
+    public $permissions;
     
     /** 
      * 
@@ -100,7 +100,10 @@ class user{
     }
     
     public function has_permission($perm_name){
-        
+        if(in_array($perm_name, $this->permissions)){
+            return true;
+        }
+        return false;
     }
     
     public function add_permission($perm_name){

@@ -53,14 +53,27 @@ class access_key{
                return false;
            }
            
+           $gd_s->close();
+           
            /* Reject users on a different IP address from the original */
            if(strlen($stored_ip > 1) && strcmp($stored_ip, $remote_ip) != 0){
+               //Break key if someone attempts to use it from a different IP address
+               //self::invalidate($key_string);
                return false;
            }
            
            /* Reject keys that have timed out */
            
-           $gd_s->close();
+           $last_used_ts = strtotime($last_used);
+           
+           $now = time();
+           
+           //If key hasn't been used in the last 24 hours
+           if(abs($now - $last_used_ts) > 86400){
+               //Set it as invalid
+               self::invalidate($key_string);
+               return false;
+           }
            
            $update_ts_query = "UPDATE " . prefix('key') . " SET last_used = null WHERE key_id=$key_id";
            

@@ -12,9 +12,6 @@ error_reporting(-1);
 require('app/init.php');
 
 $auth = new authenticator();
-$auth->check_login();
-
-$auth->get_session_key();
 
 $page_loader = new page_loader();
 

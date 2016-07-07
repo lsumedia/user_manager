@@ -9,7 +9,7 @@
     </head>  
     <body>
         <nav>
-            <!-- <img src="res/media_logo.png" alt="Media Logo" /> -->
+            <img src="res/media_logo.png" alt="Media Logo" />
             <p>Single-Sign-On</p>
         </nav>
         <main>

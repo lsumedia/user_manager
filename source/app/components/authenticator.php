@@ -10,6 +10,10 @@
 
 class authenticator{
     
+    public $key;
+    
+    public $user;
+    
     public static $config = [
         /* Authentication server root folder with trailing slash */
         'server_root' => 'http://grovestreet.me/projects/user_manager/source/',
@@ -34,6 +38,8 @@ class authenticator{
     
     public function __construct() {
         session_start();
+        $this->check_login();
+        $this->server_get_profile();
     }
     
     public function check_login(){
@@ -68,8 +74,6 @@ class authenticator{
             return false;
         }
         
-        
-        
     }
    
     public function server_check_key(){
@@ -102,10 +106,41 @@ class authenticator{
         $config = $this->config();
         $srv_addr = $config['server_address'];
         
-        $api_url = $srv_addr . '?action=check_perm&key=' . $this->key() . '&perm=' . $permission;
+        $api_url = $srv_addr . '?check_perm&key=' . $this->key . '&perm_name=' . $permission;
         
+        $data = json_decode(file_get_contents($api_url),true);
         
+        if(isset($data['has_permission'])){
+            if($data['perm_name'] == $permission && $data['has_permission'] == true){
+                return true;
+            }
+        }
         
+        return false;
+        
+    }
+    
+    /**
+     * Get user profile from server
+     * 
+     * 
+     * @return boolean
+     */
+    public function server_get_profile(){
+        
+        $config = $this->config();
+        $srv_addr = $config['server_address'];
+        
+        $api_url = $srv_addr . '?user_profile&key=' . $this->key;
+        
+        $data = json_decode(file_get_contents($api_url),true);
+        
+        if(isset($data['username'])){ 
+            $this->user = $data;
+            return $data;
+        }
+        
+        return false;
     }
     
     /**
@@ -195,10 +230,14 @@ class authenticator{
     public function status_bug(){
         $config = $this->config();
         $sess_prefix = $config['session_prefix'];
+        
+        $logout_icon_url = $config['server_root'] . 'res/logout.svg';
+        $profile_page_url = $config['server_root'] . 'auth/?p=profile&key=' . $this->key;
         ?>
 <style>
-    .authenticator_logout_main{
-        background-color:white;
+    .authenticator_bug_main{
+        background-color:black;
+        color:white;
         width:300px;
         height:65px;
         overflow:hidden;
@@ -206,11 +245,62 @@ class authenticator{
         bottom:50px;
         right:50px;
         box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        font-family: Roboto, Arial, sans-serif;
+    }
+    .authenticator_bug_main p{
+        margin:0;
+        padding:0;
+    }
+    .authenticator_bug_main img{
+        height:55px;
+    }
+    .authenticator_bug_left, .authenticator_bug_middle, .authenticator_bug_right{
+        height:65px;
+        padding-top:5px;
+        padding-bottom:5px;
+    }
+    .authenticator_bug_left{
+        width:25%;
+        float:left;
+        padding-left:5px;
+        overflow:hidden;
+    }
+    .authenticator_bug_middle{
+        width:55%;
+        float:left;
+        padding-top:10px;
+        cursor:pointer;
+    }
+    .authenticator_bug_right{
+        width:20%;
+        float:left;
+    }
+    .authenticator_bug_dp_container{
+        height:55px;
+        width:55px;
+        overflow:hidden;
+        background-color:white;
+    }
+    .authenticator_bug_fullname{
+        font-weight:500;
+    }
+    .authenticator_bug_username{
+        color:#aaa;
     }
 </style>
-<div class="authenticator_logout_main" id="<?= $sess_prefix ?>_bug">
-    <p><a href="<?= $this->logout_url() ?>">Logout</a></p>
-    <p><?= $this->key ?></p>
+<div class="authenticator_bug_main" id="<?= $sess_prefix ?>_bug">
+    <div class="authenticator_bug_left">
+        <div class="authenticator_bug_dp_container">
+            <img src="<?= $this->user['dp_url']; ?>" />
+        </div>
+    </div>
+    <div class="authenticator_bug_middle" onclick="window.open('<?= $profile_page_url ?>', '_blank', 'menubar=0,status=0,toolbar=0');" title="Edit profile">
+        <p class="authenticator_bug_fullname"><?= $this->user['fullname'] ?></p>
+        <p class="authenticator_bug_username"><?= $this->user['username'] ?></p>
+    </div>
+    <div class="authenticator_bug_right">
+        <a href="<?= $this->logout_url() ?>"><img src="<?= $logout_icon_url ?>" alt="Log out" title="Log out" /></a>
+    </div>
 </div>        
 <?php
         
