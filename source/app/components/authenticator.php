@@ -222,6 +222,13 @@ class authenticator{
         return $this->config()['logout_page_address'] . '&key=' . $this->key . '&source=' . urlencode($this->redirect_url());
     }
     
+    public function profile(){
+        $user = $this->user;
+        $user['logout_url'] = $this->logout_url();
+        $user['edit_profile_url'] = $config['server_root'] . 'auth/?p=profile&key=' . $this->key;
+        return $user;
+    }
+    
     /**
      * status_bug
      * 
@@ -260,6 +267,7 @@ class authenticator{
         height:65px;
         padding-top:5px;
         padding-bottom:5px;
+        box-sizing:content-box;
     }
     .authenticator_bug_left{
         width:65px;
