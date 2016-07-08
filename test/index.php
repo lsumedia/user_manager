@@ -3,7 +3,6 @@
 require('../source/app/components/authenticator.php');
 
 $auth = new authenticator();
-$auth->check_login();
 
 ?>
 <html>

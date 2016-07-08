@@ -45,8 +45,15 @@ switch($action){
         
         $stmt->close();
          */
-        
-        $user = new user($username);
+        try{
+            
+            $user = new user($username);
+            
+        }catch(Exception $e){
+            /* Redirect if error occurs or user not found */
+            header('location:./auth/?p=login&error&redirect=' . $redirect);
+            die();
+        }
         
         $user_ip = $_SERVER['REMOTE_ADDR'];
         
