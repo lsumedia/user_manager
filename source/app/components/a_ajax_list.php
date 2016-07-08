@@ -1,4 +1,7 @@
 <?php
+/**
+ * No idea why I called this ajax_list, it doesn't use ajax...
+ */
 class ajax_list{
     
     //Array of arrays containing key-value pairs with friendly names for both

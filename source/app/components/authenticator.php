@@ -84,7 +84,7 @@ class authenticator{
         
         $user_ip = $_SERVER['REMOTE_ADDR'];
         
-        $api_url = $srv_addr . "?check_key&key=" . $this->key . "&ip=" . $user_ip;
+        $api_url = $srv_addr . "?check_key&key=" . $this->key . "&ip=" . $user_ip . '&source_url=' . current_page_url() ;
         
         $data = json_decode(file_get_contents($api_url),true);
         

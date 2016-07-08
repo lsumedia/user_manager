@@ -52,7 +52,7 @@ $permissions = [
     
     'lsutv_submit_content' => 'LSUTV: Submit content',
     'lsutv_edit_content' => 'LSUTV: Edit content',
-    'lsutv_manage_channels' => 'LSUTV: Broadcast Control Room',
+    'lsutv_manage_channels' => 'LSUTV: Broadcast Control Centre',
     
     /* Lens */
     

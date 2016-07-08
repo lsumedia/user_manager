@@ -90,6 +90,10 @@ class user{
             }
         }
         
+        //Fetch gravatar
+        if(strlen($this->dp_url < 1)){
+            $this->get_gravatar_image();
+        }
     }
     
     public function check_password($password){
@@ -140,6 +144,13 @@ class user{
         return $clean;
     }
     
+    
+    public function get_gravatar_image(){
+        $hash = md5(strtolower(trim($this->email)));
+        
+        $this->dp_url = "https://www.gravatar.com/avatar/{$hash}";
+    }
+    
     /**
      * new_user
      * 
@@ -180,5 +191,6 @@ class user{
         }
         return $clean;
     }
+    
 }
 

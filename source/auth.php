@@ -21,8 +21,9 @@ if(isset($_GET['check_key'])){
      * Action also updates access key last_used value */
     $key_string = $_GET['key'];
     $ip = $_GET['ip'];
+    $source_url = $_GET['source_url'];
     
-    if(access_key::validate($key_string,$ip)){
+    if(access_key::validate($key_string,$ip, $source_url)){
         $response = ['valid' => true, "key" => $key_string];
     }else{
         $response = ['valid' => false, "key" => $key_string];

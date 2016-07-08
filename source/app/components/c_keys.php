@@ -32,7 +32,7 @@ class access_key{
         return false;
     }
     
-    public static function validate($key_string, $remote_ip){
+    public static function validate($key_string, $remote_ip, $source_url = null){
         
        global $db;
        
@@ -75,7 +75,10 @@ class access_key{
                return false;
            }
            
-           $update_ts_query = "UPDATE " . prefix('key') . " SET last_used = null WHERE key_id=$key_id";
+           
+           $source_url = $db->escape_string($source_url);
+           
+           $update_ts_query = "UPDATE " . prefix('key') . " SET last_used = null, last_url='{$source_url}' WHERE key_id=$key_id";
            
            $res = $db->query($update_ts_query);
            return true;
@@ -164,9 +167,11 @@ class access_key{
     public static function list_all_raw($limit = 50){
         global $db;
         
-        $sel_query = "SELECT * FROM " . prefix('key') . "  ORDER BY key_id DESC LIMIT ?";
+        $sel_query = "SELECT * FROM " . prefix('key') . " WHERE last_used > DATE_SUB(NOW(), INTERVAL 1 DAY) AND valid = 1 ORDER BY key_id DESC LIMIT ? ";
         
         $stmt = $db->prepare($sel_query);
+        
+        $onedayago = time() - (24 * 60 * 60);
         
         $stmt->bind_param('i', $limit);
         
@@ -183,5 +188,34 @@ class access_key{
         $stmt->close();
         
         return $clean_results;
+    }
+    
+    /** Generate dataset for use in ajax_list */
+    public static function list_all_clean($limit = 50){
+        
+        $raw_array = self::list_all_raw($limit);
+        
+        $clean = [];
+        
+        foreach($raw_array as $raw){
+            
+            $ip_onclick = "window.open('http://ip-api.com/#{$raw['ip_address']}', '_blank', 'height=800,width=1000,status=0,menubar=0,toolbar=0,titlebar=0')";
+            $ip_link = "<a href=\"javascript:void(0):\" onclick=\"$ip_onclick\">{$raw['ip_address']}</a>";
+            
+            $username_link = "<a href=\"./?p=users&id=${raw['username']}\">{$raw['username']}</a>";
+            
+            $kick_link = "<a href=\"\"><i class=\"material-icons red-text\">close</i></a>";
+            
+            $clean[] = [
+                'Username' => $username_link, 
+                'Logged in' => $raw['key_created'],
+                'Last used' => $raw['last_used'],
+                'IP Address' => $ip_link,
+                'Last URL' => $raw['last_url'],
+                'Kick user' => $kick_link,
+            ];
+        }
+        
+        return $clean;
     }
 }

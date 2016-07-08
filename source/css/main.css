@@ -4,3 +4,16 @@ main{
     padding:20px;
 }
 
+/* jsonlist styles for Bootstrap*/
+.listnav{
+    float:right;
+    -webkit-user-select:none;
+    user-select:none;
+}
+
+.listnav p{
+    float:left;
+}
+.listnav i{
+    cursor:pointer;
+}

@@ -21,9 +21,6 @@ class users_page extends page{
 
             $list = new ajax_list(user::list_all(), 'user_list');
             $list->display();
-
-            $test_user = new user('test');
-            var_dump($test_user->all_permissions());
         }
     
     ?>
