@@ -13,6 +13,12 @@ require('app/init.php');
 
 $auth = new authenticator();
 
+//Block users without manage_users permission
+if(!$auth->server_check_permission('manage_users')){
+    echo "You do not have permission to access this page.";
+    die();
+}
+
 $page_loader = new page_loader();
 
 if(isset($_GET['p'])){

@@ -76,6 +76,8 @@ class authenticator{
         
     }
    
+    /* Server request methods */
+    
     public function server_check_key(){
         
         $srv_addr = $this->config()['server_address'];
@@ -181,7 +183,6 @@ class authenticator{
         unset($_SESSION[$sess_prefix . '_key']);
     }
     
-    
     /* Get session key stored in GET variable */
     public function get_url_key(){
          if(isset($_GET['key'])){
@@ -231,6 +232,7 @@ class authenticator{
         $config = $this->config();
         $sess_prefix = $config['session_prefix'];
         
+        $page_prefix = $sess_prefix . '_profile';
         $logout_icon_url = $config['server_root'] . 'res/logout.svg';
         $profile_page_url = $config['server_root'] . 'auth/?p=profile&key=' . $this->key;
         ?>
@@ -283,6 +285,7 @@ class authenticator{
     }
     .authenticator_bug_fullname{
         font-weight:500;
+        font-size:1.15em;
     }
     .authenticator_bug_username{
         color:#aaa;
@@ -294,7 +297,7 @@ class authenticator{
             <img src="<?= $this->user['dp_url']; ?>" />
         </div>
     </div>
-    <div class="authenticator_bug_middle" onclick="window.open('<?= $profile_page_url ?>', '_blank', 'menubar=0,status=0,toolbar=0');" title="Edit profile">
+    <div class="authenticator_bug_middle" onclick="window.open('<?= $profile_page_url ?>', '<?= $page_prefix ?>', 'menubar=0,status=0,toolbar=0');" title="Edit profile">
         <p class="authenticator_bug_fullname"><?= $this->user['fullname'] ?></p>
         <p class="authenticator_bug_username"><?= $this->user['username'] ?></p>
     </div>
