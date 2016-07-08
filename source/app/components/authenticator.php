@@ -262,19 +262,19 @@ class authenticator{
         padding-bottom:5px;
     }
     .authenticator_bug_left{
-        width:25%;
+        width:65px;
         float:left;
         padding-left:5px;
         overflow:hidden;
     }
     .authenticator_bug_middle{
-        width:55%;
+        width:170px;
         float:left;
         padding-top:10px;
         cursor:pointer;
     }
     .authenticator_bug_right{
-        width:20%;
+        width:60px;
         float:left;
     }
     .authenticator_bug_dp_container{
