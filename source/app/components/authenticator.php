@@ -229,6 +229,15 @@ class authenticator{
         return $user;
     }
     
+    
+    /* Append key to URL and return the key 
+     * (for linking to external sites in the same SSO network) */
+    public function append_key($url){
+        $u_v = (strpos($url, '?') == -1)? '?' : '&';
+        
+        return $url . $u_v . '=' . $this->key;
+    }
+    
     /**
      * status_bug
      * 
