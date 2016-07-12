@@ -97,5 +97,9 @@ switch($action){
             echo "Error - failed to invalidate access key. You may not have been securely logged out!";
         }
         break;
-    
+        
+    case 'update':
+        header('location:./auth/?p=profile');
+        die();
+        break;
 }

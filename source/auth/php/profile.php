@@ -24,4 +24,43 @@
  * THE SOFTWARE.
  */
 
-echo $_GET['key'];
+require_once('../app/components/authenticator.php');
+require_once('../app/config.php');
+
+$auth = new authenticator();
+
+$profile = $auth->profile();
+
+?>
+ <div class="form_row">
+        <h4>Edit profile</h4>
+    </div>
+<form action="../request_login.php?action=update" method="POST">
+    <div class="form_row">
+        <p>Display name</p>
+        <input type="text" name="username" value="<?= $profile['fullname'] ?>" />
+    </div>
+    <div class="form_row">
+        <p>Email</p>
+        <input type="email" name="email" value="<?= $profile['email'] ?>" />
+    </div>
+    <div class="form_row">
+        <p>Profile picture URL</p>
+        <input type="url" name="dp_url" value="<?= $profile['dp_url'] ?>" />
+    </div>
+    <div class="form_row">
+        <input type="submit" value="Save changes"/>
+    </div>
+</form>
+<div>
+    <div class="form_row">
+        <h4>Your permissions</h4>
+    </div>
+    <ul>
+        <?php
+        foreach($profile['permissions'] as $permission){
+            echo "<li>{$permissions[$permission]}</li>";
+        }
+        ?>
+    </ul>
+</div>

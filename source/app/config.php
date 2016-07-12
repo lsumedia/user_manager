@@ -34,6 +34,9 @@ $config = [
 
 $permissions = [
     
+    /* Grants user all possible permissions. Do not remove this permission! */
+    'super_admin' => 'All permissions',
+    
     /* Permission to manage users. Do not remove this permission! */
     'manage_users' => 'Manage user permissions',
     
