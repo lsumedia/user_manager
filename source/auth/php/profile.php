@@ -45,7 +45,7 @@ $profile = $auth->profile();
         <input type="email" name="email" value="<?= $profile['email'] ?>" />
     </div>
     <div class="form_row">
-        <p>Profile picture URL</p>
+        <p>Profile picture URL (Leave blank to use Gravatar)</p>
         <input type="url" name="dp_url" value="<?= $profile['dp_url'] ?>" />
     </div>
     <div class="form_row">
