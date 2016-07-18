@@ -99,7 +99,7 @@ switch($action){
         break;
         
     case 'update':
-        header('location:./auth/?p=profile');
+        header('location:./auth/?p=profile&updated');
         die();
         break;
 }

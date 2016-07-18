@@ -86,6 +86,17 @@ input.disabled{
     background-color: #EEE;
 }
 
+.form_row.success, .form_row.error{
+    padding:5px;
+    padding-left:10px;
+    border-radius:5px;
+}
+.form_row.success{
+    background-color:#76FF03;
+}
+.form_row.error{
+    backgrond-color:#FF1744;
+}
 
 @media(screen) and (max-width:799px){
     main{

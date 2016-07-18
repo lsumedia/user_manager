@@ -31,6 +31,23 @@ $auth = new authenticator();
 
 $profile = $auth->profile();
 
+//Display success message
+if(isset($_GET['updated'])){
+?>
+<div class="form_row success">
+    <h4>Saved changes</h4>
+</div>
+<?php
+}
+
+//Display error message
+if(isset($_GET['error'])){
+?>
+<div class="form_row error">
+    <h4>An error occurred</h4>
+</div>
+<?php
+}
 ?>
  <div class="form_row">
         <h4>Edit profile</h4>
