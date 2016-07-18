@@ -37,6 +37,10 @@ $profile = $auth->profile();
     </div>
 <form action="../request_login.php?action=update" method="POST">
     <div class="form_row">
+        <p>Username</p>
+        <input type="text" class="disabled" readonly value="<?= $profile['username'] ?>" />
+    </div>
+    <div class="form_row">
         <p>Display name</p>
         <input type="text" name="username" value="<?= $profile['fullname'] ?>" />
     </div>
@@ -47,6 +51,12 @@ $profile = $auth->profile();
     <div class="form_row">
         <p>Profile picture URL (Leave blank to use Gravatar)</p>
         <input type="url" name="dp_url" value="<?= $profile['dp_url'] ?>" />
+    </div>
+    <div class="form_row border">
+    </div>
+    <div class="form_row">
+        <p>New password</p>
+        <input type="password" name="password" />
     </div>
     <div class="form_row">
         <input type="submit" value="Save changes"/>

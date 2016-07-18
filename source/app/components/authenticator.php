@@ -314,7 +314,7 @@ class authenticator{
             <img src="<?= $this->user['dp_url']; ?>" />
         </div>
     </div>
-    <div class="authenticator_bug_middle" onclick="window.open('<?= $profile_page_url ?>', '<?= $page_prefix ?>', 'menubar=0,status=0,toolbar=0');" title="Edit profile">
+    <div class="authenticator_bug_middle" onclick="window.open('<?= $profile_page_url ?>', '<?= $page_prefix ?>', 'menubar=0,status=0,toolbar=0,width=940px,height=700px');" title="Edit profile">
         <p class="authenticator_bug_fullname"><?= $this->user['fullname'] ?></p>
         <p class="authenticator_bug_username"><?= $this->user['username'] ?></p>
     </div>

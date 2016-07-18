@@ -78,6 +78,13 @@ input[type=select]:hover, button:hover{
     width:40%;
 }
 
+.border{
+    border-bottom:1px solid rgba(200,200,200,0.6);
+}
+
+input.disabled{
+    background-color: #EEE;
+}
 
 
 @media(screen) and (max-width:799px){
