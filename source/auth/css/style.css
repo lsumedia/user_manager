@@ -95,7 +95,14 @@ input.disabled{
     background-color:#76FF03;
 }
 .form_row.error{
-    backgrond-color:#FF1744;
+    color:white;
+    background-color:#FF1744;
+}
+
+textarea{
+    width:100%;
+    min-height:150px;
+    resize:vertical;
 }
 
 @media(screen) and (max-width:799px){

@@ -98,8 +98,23 @@ switch($action){
         }
         break;
         
-    case 'update':
-        header('location:./auth/?p=profile&updated');
+    case 'update_profile':
+        
+        $key = $_POST['key'];
+        
+        $fullname = $_POST['fullname'];
+        $email = $_POST['email'];
+        $dp_url = $_POST['dp_url'];
+        $bio = $_POST['bio'];
+        
+        if($username = access_key::get_username($key)){
+            $user = new user($username);
+            //header('location:./auth/?p=profile&updated');
+            
+           
+        }
+        
+        header('location:./auth/?p=profile&error');
         die();
         break;
 }

@@ -48,11 +48,13 @@ if(isset($_GET['error'])){
 </div>
 <?php
 }
+
 ?>
- <div class="form_row">
-        <h4>Edit profile</h4>
-    </div>
-<form action="../request_login.php?action=update" method="POST">
+<!-- Edit profile form -->
+<div class="form_row">
+    <h4>Edit profile</h4>
+</div>
+<form action="../request_login.php?action=update_profile" method="POST">
     <div class="form_row">
         <p>Username</p>
         <input type="text" class="disabled" readonly value="<?= $profile['username'] ?>" />
@@ -69,25 +71,35 @@ if(isset($_GET['error'])){
         <p>Profile picture URL (Leave blank to use Gravatar)</p>
         <input type="url" name="dp_url" value="<?= $profile['dp_url'] ?>" />
     </div>
-    <div class="form_row border">
-    </div>
     <div class="form_row">
-        <p>New password</p>
-        <input type="password" name="password" />
+        <p>Biography</p>
     </div>
+    <textarea name="bio" ><?= $profile['bio'] ?></textarea>
+    
+    <input type="hidden" name="key" value="<?= $auth->key ?>" />
     <div class="form_row">
         <input type="submit" value="Save changes"/>
     </div>
 </form>
-<div>
-    <div class="form_row">
-        <h4>Your permissions</h4>
+<div class="form_row border"></div>
+<!-- Password reset form -->
+<div class="form_row">
+        <p>New password</p>
+        <input type="password" name="password" />
+</div>
+<div class="form_row">
+        <input type="submit" value="Change password"/>
     </div>
-    <ul>
-        <?php
-        foreach($profile['permissions'] as $permission){
-            echo "<li>{$permissions[$permission]}</li>";
-        }
-        ?>
-    </ul>
+<div>
+<!-- Permissions info section -->
+<div class="form_row">
+    <h4>Your permissions</h4>
+</div>
+<ul>
+    <?php
+    foreach($profile['permissions'] as $permission){
+        echo "<li>{$permissions[$permission]}</li>";
+    }
+    ?>
+</ul>
 </div>
