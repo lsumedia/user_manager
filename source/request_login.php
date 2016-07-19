@@ -108,13 +108,21 @@ switch($action){
         $bio = $_POST['bio'];
         
         if($username = access_key::get_username($key)){
-            $user = new user($username);
-            //header('location:./auth/?p=profile&updated');
-            
-           
+        
+            $query = "UPDATE " . prefix('user') . " SET fullname=?, email=?, dp_url=?, bio=? WHERE username=?";
+
+            if($stmt = $db->prepare($query)){
+
+                $stmt->bind_param("sssss", $fullname, $email, $dp_url, $bio, $username);
+                $stmt->execute();
+                $stmt->close();
+                
+                header('location:./auth/?p=profile&updated');
+                break;
+            }
         }
         
+        
         header('location:./auth/?p=profile&error');
-        die();
         break;
 }

@@ -61,7 +61,7 @@ if(isset($_GET['error'])){
     </div>
     <div class="form_row">
         <p>Display name</p>
-        <input type="text" name="username" value="<?= $profile['fullname'] ?>" />
+        <input type="text" name="fullname" value="<?= $profile['fullname'] ?>" />
     </div>
     <div class="form_row">
         <p>Email</p>
