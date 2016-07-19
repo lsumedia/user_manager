@@ -17,3 +17,7 @@ main{
 .listnav i{
     cursor:pointer;
 }
+
+.row{
+    padding:15px;
+}

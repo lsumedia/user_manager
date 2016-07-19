@@ -13,10 +13,22 @@ class users_page extends page{
             
             $c_user = new user($_GET['id']);
             
-            ?>
+?>
 <div class="row">
     <div class="col-lg-12">
-        <h3><?= $c_user->username ?></h3>
+        <h3>Editing user</h3>
+    </div>
+</div>
+<div>
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <input name="username" class="form-control disabled" value="<?= $c_user->username ?>" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-lg-12">
+            <input name="fullname" class="form-control" value="<?= $c_user->fullname ?>" />
+        </div>
     </div>
 </div>
 <?php
