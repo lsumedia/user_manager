@@ -8,10 +8,59 @@ class users_page extends page{
     public $title = 'Users';
     
     public function content() {
-
+        global $db;
+        
         if(isset($_GET['id'])){
+            //Load user object
+            
+            
+            if(isset($_POST['username'])){
+                $e_user = new user($_GET['id']);
+                
+                //If post request
+                $fullname = $_POST['fullname'];
+                $email = $_POST['email'];
+                $dp_url = $_POST['dp_url'];
+                $bio = $_POST['bio'];
+
+                $password = $_POST['password'];
+
+                $query = "UPDATE " . prefix('user') . " SET fullname=?, email=?, dp_url=?, bio=? WHERE username=?";
+
+                if($stmt = $db->prepare($query)){
+
+                    $stmt->bind_param("sssss", $fullname, $email, $dp_url, $bio, $e_user->username);
+                    $stmt->execute();
+                    $stmt->close();
+
+                    echo "<div class=\"alert alert-success\" role=\"alert\">Saved changes</div>";
+                     
+                    if(strlen($password) > 7){
+                        //Password meets requirements, update
+                        if($e_user->change_password($password)){
+                            //header('location:./auth/?p=profile&updated&goodpassword');
+                            echo "<div class=\"alert alert-success\" role=\"alert\">Changed password</div>";
+
+                        }else{
+                            echo "<div class=\"alert alert-warning\" role=\"alert\">Error changing password</div>";
+                        }
+
+                    }else if(strlen($password) > 0){
+                        //Password fails requirements, send error
+                        //header('location:./auth/?p=profile&updated&badpassword');                   
+                         echo "<div class=\"alert alert-warning\" role=\"alert\">Password must be at least 8 characters long</div>";
+
+                    }
+                    
+
+                }else{
+                    echo "<div class=\"alert alert-danger\" role=\"alert\">Error saving changes</div>";
+                }
+
+            }
             
             $c_user = new user($_GET['id']);
+            
             
 ?>
 <div class="row">
@@ -19,20 +68,40 @@ class users_page extends page{
         <h3>Editing user</h3>
     </div>
 </div>
-<div>
-    <div class="row">
-        <div class="col-sm-12 col-lg-12">
-            <input name="username" class="form-control disabled" value="<?= $c_user->username ?>" />
-        </div>
+<!-- Edit user form -->
+<form action="" method="POST">
+    <div class="form-group">
+        <label for="user-username">Username</label>
+        <input type="text" class="form-control disabled" id="user-username" readonly placeholder="Username"  name="username" value="<?= $c_user->username ?>">
     </div>
-    <div class="row">
-        <div class="col-sm-12 col-lg-12">
-            <input name="fullname" class="form-control" value="<?= $c_user->fullname ?>" />
-        </div>
+    <div class="form-group">
+        <label for="user-fullname">Full name</label>
+        <input type="text" class="form-control" id="user-email" placeholder="Full name" name="fullname" value="<?= $c_user->fullname ?>">
+    </div>
+    <div class="form-group">
+        <label for="user-email">Email address</label>
+        <input type="email" class="form-control" id="user-email" placeholder="Email" name="email" value="<?= $c_user->email ?>">
+    </div>
+    <div class="form-group">
+        <label for="user-dp">Email address</label>
+        <input type="url" class="form-control" id="user-dp" placeholder="Profile picture URL"  name="dp_url" value="<?= $c_user->dp_url ?>">
+    </div>
+    <div class="form-group">
+        <label for="user-bio">Biography</label>
+        <textarea class="form-control" name="bio" id="user-bio"><?= $c_user->bio ?></textarea>
+    </div>
+    <div class="form-group">
+        <label for="user-pw">Reset password</label>
+        <input type="password" class="form-control" id="user-pw" name="password" placeholder="Password reset">
+    </div>
+    <button type="submit" class="btn btn-success align-right">Save changes</button>
+</form>
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <h4>All user permissions</h4>
     </div>
 </div>
-<?php
-            
+<?php            
             $list = new ajax_list($c_user->list_permissions(), 'perm_list');
             $list->display();
             

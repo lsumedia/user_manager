@@ -50,10 +50,10 @@ class ajax_list{
             $numpages = floor(($count-1) / 10 ) + 1;
             $back_id = $this->id . '_back';
             $next_id = $this->id . '_next';
-            echo "<div class=\"col-lg-6 col-sm-6\"><input onkeyup=\"list_search('$this->id','$data_id',this.value);\" placeholder='Search' type='text' id='$search_id' class='form-control' /></div>";
+            echo "<div class=\"col-lg-9 col-sm-12\"><input onkeyup=\"list_search('$this->id','$data_id',this.value);\" placeholder='Search' type='text' id='$search_id' class='form-control' /></div>";
             $back = "<i onclick=\"list_change_page('$this->id','$data_id',0);\" id='$back_id' class='material-icons' style=\"color:#888;\">chevron_left</i>";
             $next = "<i onclick=\"list_change_page('$this->id','$data_id',1);\" id='$next_id' class='material-icons'>chevron_right</i>"; 
-            echo "<div class=\"listnav col-lg-6 col-sm-6\"><p>Page <span id='$page_number'>1</span> of $numpages</p>$back$next</div>";
+            echo "<div class=\"listnav col-lg-3 col-sm-12\"><p>Page <span id='$page_number'>1</span> of $numpages</p>$back$next</div>";
         }
         echo "</div>";
         echo "<table class=\"table table-striped\" id=\"$this->id\" $this->tags >",PHP_EOL;
