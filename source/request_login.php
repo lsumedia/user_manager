@@ -107,7 +107,11 @@ switch($action){
         $dp_url = $_POST['dp_url'];
         $bio = $_POST['bio'];
         
+        $password = $_POST['password'];
+        
         if($username = access_key::get_username($key)){
+            
+            $user = new user($username);
         
             $query = "UPDATE " . prefix('user') . " SET fullname=?, email=?, dp_url=?, bio=? WHERE username=?";
 
@@ -116,6 +120,18 @@ switch($action){
                 $stmt->bind_param("sssss", $fullname, $email, $dp_url, $bio, $username);
                 $stmt->execute();
                 $stmt->close();
+                
+                if(strlen($password) > 7){
+                    //Password meets requirements, update
+                    if($user->change_password($password)){
+                        header('location:./auth/?p=profile&updated&goodpassword');
+                    }
+                    
+                }else if(strlen($password) > 0){
+                    //Password fails requirements, send error
+                    header('location:./auth/?p=profile&updated&badpassword');
+                    break;
+                }
                 
                 header('location:./auth/?p=profile&updated');
                 break;

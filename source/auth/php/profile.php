@@ -32,12 +32,11 @@ $auth = new authenticator();
 $profile = $auth->profile();
 
 //Display success message
-if(isset($_GET['updated'])){
-?>
-<div class="form_row success">
-    <h4>Saved changes</h4>
-</div>
-<?php
+if(isset($_GET['updated'])){ ?>
+    <div class="form_row success">
+        <h4>Saved changes</h4>
+    </div>
+    <?php
 }
 
 //Display error message
@@ -47,6 +46,20 @@ if(isset($_GET['error'])){
     <h4>An error occurred</h4>
 </div>
 <?php
+}
+
+if(isset($_GET['goodpassword'])){ ?>
+    <div class="form_row success">
+        <h4>Password changed</h4>
+    </div>
+    <?php
+}
+
+if(isset($_GET['badpassword'])){ ?>
+    <div class="form_row error">
+        <h4>Password must be at least 8 characters long</h4>
+    </div>
+    <?php
 }
 
 ?>
@@ -76,21 +89,19 @@ if(isset($_GET['error'])){
     </div>
     <textarea name="bio" ><?= $profile['bio'] ?></textarea>
     
+    <!-- Password change section -->
+    <div class="form_row border"></div>
+    <div class="form_row">
+            <p>New password</p>
+            <input type="password" name="password" />
+    </div>
+    
     <input type="hidden" name="key" value="<?= $auth->key ?>" />
     <div class="form_row">
         <input type="submit" value="Save changes"/>
     </div>
 </form>
-<div class="form_row border"></div>
-<!-- Password reset form -->
-<div class="form_row">
-        <p>New password</p>
-        <input type="password" name="password" />
-</div>
-<div class="form_row">
-        <input type="submit" value="Change password"/>
-    </div>
-<div>
+
 <!-- Permissions info section -->
 <div class="form_row">
     <h4>Your permissions</h4>

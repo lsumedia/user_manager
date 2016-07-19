@@ -113,6 +113,23 @@ class user{
         return false;
     }
     
+    public function change_password($newpassword){
+        global $db;
+        
+        $hash = process_password($newpassword);
+        
+        $query = "UPDATE " . prefix('user') . " SET password=? WHERE username=?";
+        if($stmt = $db->prepare($query)){
+            $stmt->bind_param("ss", $hash, $this->username);
+            if($stmt->execute()){
+                $stmt->close();
+                return true;
+            }
+        }
+        $stmt->close();
+        return false;
+    }
+    
     public function has_permission($perm_name){
         if(in_array($perm_name, $this->permissions)){
             return true;
