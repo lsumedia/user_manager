@@ -13,6 +13,14 @@ class users_page extends page{
             
             $c_user = new user($_GET['id']);
             
+            ?>
+<div class="row">
+    <div class="col-lg-12">
+        <h3><?= $c_user->username ?></h3>
+    </div>
+</div>
+<?php
+            
             $list = new ajax_list($c_user->list_permissions(), 'perm_list');
             $list->display();
             
