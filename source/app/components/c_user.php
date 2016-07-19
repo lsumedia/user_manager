@@ -55,6 +55,7 @@ class user{
      */
     public function __construct($username_or_email) {
         global $db;
+        global $permissions;
         
         $query = "SELECT username, fullname, email, bio, dp_url, password FROM " . prefix('user') . " WHERE (username=? OR email=?)";
         
@@ -77,6 +78,7 @@ class user{
         
         $stmt->close();
         
+        //Get user permissions
         $perm_query = "SELECT perm_name FROM " . prefix('user_perm') . " WHERE username=?";
         
         if($stmt2 = $db->prepare($perm_query)){
@@ -87,6 +89,14 @@ class user{
 
             while($stmt2->fetch()){
                 $this->permissions[] = $perm_name;
+            }
+        }
+        
+        //Super user permission - add all permissions to user object
+        if(in_array('super_admin', $this->permissions)){
+            $this->permissions = null;
+            foreach($permissions as $perm => $title){
+                $this->permissions[] = $perm;
             }
         }
         
