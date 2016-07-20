@@ -13,6 +13,13 @@ class users_page extends page{
         if(isset($_GET['id'])){
             //Load user object
             
+            ?>
+            <!-- Breadcrumbs -->
+            <ol class="breadcrumb">
+              <li><a href="./?p=users">Users</a></li>
+              <li><a href="javascript:void();">Edit <?= $_GET['id'] ?></a></li>
+            </ol>
+            <?php
             
             if(isset($_POST['username'])){
                 $e_user = new user($_GET['id']);
@@ -25,6 +32,7 @@ class users_page extends page{
 
                 $password = $_POST['password'];
 
+                //Update user query
                 $query = "UPDATE " . prefix('user') . " SET fullname=?, email=?, dp_url=?, bio=? WHERE username=?";
 
                 if($stmt = $db->prepare($query)){
@@ -63,11 +71,6 @@ class users_page extends page{
             
             
 ?>
-<!-- Breadcrumbs -->
-<ol class="breadcrumb">
-  <li><a href="./?p=users">Users</a></li>
-  <li><a href="javascript:void();">Edit <?= $c_user->username ?></a></li>
-</ol>
 <!-- Edit user form -->
 <form action="" method="POST">
     <div class="form-group">
