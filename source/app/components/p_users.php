@@ -63,11 +63,11 @@ class users_page extends page{
             
             
 ?>
-<div class="row">
-    <div class="col-lg-12">
-        <h3>Editing user</h3>
-    </div>
-</div>
+<!-- Breadcrumbs -->
+<ol class="breadcrumb">
+  <li><a href="./?p=users">Users</a></li>
+  <li><a href="javascript:void();">Edit <?= $c_user->username ?></a></li>
+</ol>
 <!-- Edit user form -->
 <form action="" method="POST">
     <div class="form-group">
@@ -80,10 +80,10 @@ class users_page extends page{
     </div>
     <div class="form-group">
         <label for="user-email">Email address</label>
-        <input type="email" class="form-control" id="user-email" placeholder="Email" name="email" value="<?= $c_user->email ?>">
+        <input type="email" class="form-control" id="user-email" placeholder="Email address" name="email" value="<?= $c_user->email ?>">
     </div>
     <div class="form-group">
-        <label for="user-dp">Email address</label>
+        <label for="user-dp">Profile picture</label>
         <input type="url" class="form-control" id="user-dp" placeholder="Profile picture URL"  name="dp_url" value="<?= $c_user->dp_url ?>">
     </div>
     <div class="form-group">
@@ -138,6 +138,9 @@ class users_page extends page{
     }
     
     public function header_content() {
+        if(isset($_GET['id'])){
+            $this->title = "";
+        }
     }
 }
 

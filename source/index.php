@@ -40,7 +40,7 @@ $page_loader->load_page_by_name($page_id);
         <link rel="stylesheet" href="css/main.css" />
         
         
-        <?php js_import(); ?>
+        <?php js_import(); $page_loader->load_header(); ?>
     </head>
     
     <body>
@@ -68,10 +68,11 @@ $page_loader->load_page_by_name($page_id);
     </nav>
 
         <main class="container">
+            <?php if(strlen($page_loader->current_page_name()) > 0){ ?>
             <div class="page-header">
                 <h1><?= $page_loader->current_page_name() ?></h1>
             </div>
-            
+            <?php } ?>
             <?php $page_loader->load_content(); ?>
         </main>
         
