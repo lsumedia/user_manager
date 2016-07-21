@@ -203,6 +203,8 @@ class user{
         foreach($raw as $perm_name){
             $clean[] = ['Permission' => $permissions[$perm_name], 'Permission code' => $perm_name];
         }
+        
+        return $clean;
     }
     
     
