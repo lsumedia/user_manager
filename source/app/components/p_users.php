@@ -119,7 +119,11 @@ class users_page extends page{
 </div>
 
 <!-- Individual permissions -->
-
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <h4>User individual permissions</h4>
+    </div>
+</div>
 <?php
 $i_list = new ajax_list($c_user->list_individual_permissions(), 'i_perm_list');
 $i_list->display();
