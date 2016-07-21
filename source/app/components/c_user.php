@@ -141,6 +141,7 @@ class user{
         //If user does not already have this permission
         if(!$this->has_permission($perm_name)){
             //Add permission
+            $query = "INSERT INTO " . prefix('user_perm') . " (username,perm_name) VALUES (?,?)";
         }
     }
     
@@ -165,10 +166,43 @@ class user{
         $clean = [];
         
         foreach($list as $item){
-            $clean[] = ['Permission' => $permissions[$item]];
+            $clean[] = ['Permission' => $permissions[$item], "Permission code" => $item];
         }
         
         return $clean;
+    }
+    
+    public function individual_permissions(){
+        //Initialise database object
+        global $db;
+        
+        //Array to store results
+        $ind_perms = [];
+        
+        $query = "SELECT perm_name FROM " . prefix('user_perm') . " WHERE username=?";
+        if($stmt = $db->prepare($query)){
+            $stmt->bind_param('s', $this->username);
+            $stmt->execute();
+            
+            $stmt->bind_result($perm_name);
+            while($stmt->fetch()){
+                $ind_perms[] = $perm_name;
+            }
+        }
+        
+        return $ind_perms;
+        
+    }
+    
+    public function list_individual_permissions(){
+        global $permissions;
+        
+        $raw = $this->individual_permissions();
+        $clean = [];
+        
+        foreach($raw as $perm_name){
+            $clean[] = ['Permission' => $permissions[$perm_name], 'Permission code' => $perm_name];
+        }
     }
     
     

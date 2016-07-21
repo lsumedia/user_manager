@@ -19,6 +19,11 @@ class users_page extends page{
               <li><a href="./?p=users">Users</a></li>
               <li><a href="javascript:void();">Edit <?= $_GET['id'] ?></a></li>
             </ol>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <h3>Edit profile</h3>
+                </div>
+            </div>
             <?php
             
             if(isset($_POST['username'])){
@@ -99,17 +104,40 @@ class users_page extends page{
     </div>
     <button type="submit" class="btn btn-success align-right">Save changes</button>
 </form>
+
 <div class="row">
     <div class="col-lg-12 col-sm-12">
-        <h4>All user permissions</h4>
+        <h3>Group memberships</h3>
+    </div>
+</div>
+
+<!-- Permissions edit section -->
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <h3>Permissions</h3>
+    </div>
+</div>
+
+<!-- Individual permissions -->
+
+<?php
+$i_list = new ajax_list($c_user->list_individual_permissions(), 'i_perm_list');
+$i_list->display();
+?>
+
+<!-- All permissions -->
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <h4>All user/group permissions</h4>
     </div>
 </div>
 <?php            
-            $list = new ajax_list($c_user->list_permissions(), 'perm_list');
-            $list->display();
-            
+            $all_perm_list = new ajax_list($c_user->list_permissions(), 'all_perm_list');
+            $all_perm_list->display();
             
         }else{
+            
+            /* All user page */
 
             $list = new ajax_list(user::list_all(), 'user_list');
             $list->display();
