@@ -74,8 +74,12 @@ function list_change_page(listId,dataLocation,pageNumber){
             }   
         }
         
-        document.getElementById(listId + '_body').innerHTML = html;
-        document.getElementById(listId + '_pagenumber').innerHTML = pageNumber + 1;
+        try{
+            document.getElementById(listId + '_body').innerHTML = html;
+            document.getElementById(listId + '_pagenumber').innerHTML = pageNumber + 1;
+        }catch(e){
+            console.log(e);
+        }
         
         //Load buttons
         var backbtn = document.getElementById(listId + '_back');

@@ -39,7 +39,7 @@ $page_loader->load_page_by_name($page_id);
         <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
         <link rel="stylesheet" href="css/main.css" />
         
-        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>        
         <?php js_import(); $page_loader->load_header(); ?>
     </head>
     

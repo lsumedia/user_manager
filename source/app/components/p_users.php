@@ -43,29 +43,32 @@ class users_page extends page{
                 if($stmt = $db->prepare($query)){
 
                     $stmt->bind_param("sssss", $fullname, $email, $dp_url, $bio, $e_user->username);
-                    $stmt->execute();
-                    $stmt->close();
+                    if($stmt->execute()){
+                        $stmt->close();
 
-                    echo "<div class=\"alert alert-success\" role=\"alert\">Saved changes</div>";
-                     
-                    if(strlen($password) > 7){
-                        //Password meets requirements, update
-                        if($e_user->change_password($password)){
-                            //header('location:./auth/?p=profile&updated&goodpassword');
-                            echo "<div class=\"alert alert-success\" role=\"alert\">Changed password</div>";
+                        echo "<div class=\"alert alert-success\" role=\"alert\">Saved changes</div>";
 
-                        }else{
-                            echo "<div class=\"alert alert-warning\" role=\"alert\">Error changing password</div>";
+                        if(strlen($password) > 7){
+                            //Password meets requirements, update
+                            if($e_user->change_password($password)){
+                                //header('location:./auth/?p=profile&updated&goodpassword');
+                                echo "<div class=\"alert alert-success\" role=\"alert\">Changed password</div>";
+
+                            }else{
+                                echo "<div class=\"alert alert-warning\" role=\"alert\">Error changing password</div>";
+                            }
+
+                        }else if(strlen($password) > 0){
+                            //Password fails requirements, send error
+                            //header('location:./auth/?p=profile&updated&badpassword');                   
+                             echo "<div class=\"alert alert-warning\" role=\"alert\">Password must be at least 8 characters long</div>";
+
                         }
-
-                    }else if(strlen($password) > 0){
-                        //Password fails requirements, send error
-                        //header('location:./auth/?p=profile&updated&badpassword');                   
-                         echo "<div class=\"alert alert-warning\" role=\"alert\">Password must be at least 8 characters long</div>";
-
                     }
-                    
-
+                    else{
+                        $stmt->close();
+                        echo "<div class=\"alert alert-danger\" role=\"alert\">Error saving changes - please check email address is unique</div>";
+                    }
                 }else{
                     echo "<div class=\"alert alert-danger\" role=\"alert\">Error saving changes</div>";
                 }
@@ -141,6 +144,22 @@ $i_list->display();
             
         }else{
             
+            //Add new user
+            if(isset($_GET['new'])){
+               echo "add user";
+                
+            }
+            
+?>
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#new_user_modal">Add user</button>
+    </div>
+</div>
+
+
+<?php
+            
             /* All user page */
 
             $list = new ajax_list(user::list_all(), 'user_list');
@@ -150,20 +169,45 @@ $i_list->display();
     ?>
 
 <!-- Modal -->
-<div class="modal fade" id="new_user_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="new_user_modal" tabindex="-1" role="dialog" aria-labelledby="new_user_modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+        <form action="./?p=users&new" method="POST">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="new_user_modal_label">Add user</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="user-username">Username</label>
+                    <input type="text" class="form-control" id="user-username" placeholder="Username"  name="username" value="<?= $c_user->username ?>">
+                </div>
+                <div class="form-group">
+                    <label for="user-fullname">Full name</label>
+                    <input type="text" class="form-control" id="user-email" placeholder="Full name" name="fullname" value="<?= $c_user->fullname ?>">
+                </div>
+                <div class="form-group">
+                    <label for="user-email">Email address</label>
+                    <input type="email" class="form-control" id="user-email" placeholder="Email address" name="email" value="<?= $c_user->email ?>">
+                </div>
+                <div class="form-group">
+                    <label for="user-dp">Profile picture</label>
+                    <input type="url" class="form-control" id="user-dp" placeholder="Profile picture URL"  name="dp_url" value="<?= $c_user->dp_url ?>">
+                </div>
+                <div class="form-group">
+                    <label for="user-bio">Biography</label>
+                    <textarea class="form-control" name="bio" id="user-bio"><?= $c_user->bio ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="user-pw">Password</label>
+                    <input type="password" class="form-control" id="user-pw" name="password" placeholder="Password">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Add new user</button>
+            </div>
+        </form>
     </div>
   </div>
 </div>
