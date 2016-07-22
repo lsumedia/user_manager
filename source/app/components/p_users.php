@@ -35,7 +35,7 @@ class users_page extends page{
                 $dp_url = $_POST['dp_url'];
                 $bio = $_POST['bio'];
 
-                $password = $_POST['password'];
+                $password = $_POST['reset_password'];
 
                 //Update user query
                 $query = "UPDATE " . prefix('user') . " SET fullname=?, email=?, dp_url=?, bio=? WHERE username=?";
@@ -80,7 +80,7 @@ class users_page extends page{
             
 ?>
 <!-- Edit user form -->
-<form action="" method="POST">
+<form action="" method="POST" autocomplete="off">
     <div class="form-group">
         <label for="user-username">Username</label>
         <input type="text" class="form-control disabled" id="user-username" readonly placeholder="Username"  name="username" value="<?= $c_user->username ?>">
@@ -103,9 +103,10 @@ class users_page extends page{
     </div>
     <div class="form-group">
         <label for="user-pw">Reset password</label>
-        <input type="password" class="form-control" id="user-pw" name="password" placeholder="Password reset">
+        <input type="password" class="form-control" id="user-pw" name="reset_password" placeholder="Password reset" autocomplete="off">
     </div>
-    <button type="submit" class="btn btn-success align-right">Save changes</button>
+    <button type="submit" class="btn btn-success">Save changes</button>
+    <button class="btn btn-danger">Delete user</button>
 </form>
 
 <div class="row">
@@ -146,7 +147,36 @@ $i_list->display();
             
             //Add new user
             if(isset($_GET['new'])){
-               echo "add user";
+                
+                $new_username = $_POST['username'];
+                //If post request
+                $new_fullname = $_POST['fullname'];
+                $new_email = $_POST['email'];
+                $new_dp_url = $_POST['dp_url'];
+                $new_bio = $_POST['bio'];
+
+                $new_password = $_POST['password'];
+                
+                $new_hash = process_password($new_password);
+
+                //Update user query
+                $query = "INSERT INTO " . prefix('user') . " (username,fullname,email,dp_url,bio,password) VALUES (?,?,?,?,?,?)";
+                
+                if($stmt = $db->prepare($query)){
+                    
+                    //Bind variables
+                    $stmt->bind_param("ssssss", $new_username, $new_fullname, $new_email, $new_dp_url, $new_bio, $new_hash);
+                    
+                    if($stmt->execute()){
+                        echo "<div class=\"alert alert-success\" role=\"alert\">Added new user $new_username</div>";
+
+                    }else{
+                        echo "<div class=\"alert alert-danger\" role=\"alert\">Error adding new user</div>";
+
+                    }
+                    
+                    $stmt->close();
+                }
                 
             }
             
