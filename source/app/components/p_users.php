@@ -9,8 +9,11 @@ class users_page extends page{
     
     public function content() {
         global $db;
+        global $auth;
         
         if(isset($_GET['id'])){
+            //Edit user page
+            
             //Load user object
             
             ?>
@@ -80,7 +83,7 @@ class users_page extends page{
             
 ?>
 <!-- Edit user form -->
-<form action="" method="POST" autocomplete="off">
+<form action="" method="POST" autocomplete="off" id="edit_user_form">
     <div class="form-group">
         <label for="user-username">Username</label>
         <input type="text" class="form-control disabled" id="user-username" readonly placeholder="Username"  name="username" value="<?= $c_user->username ?>">
@@ -105,10 +108,20 @@ class users_page extends page{
         <label for="user-pw">Reset password</label>
         <input type="password" class="form-control" id="user-pw" name="reset_password" placeholder="Password reset" autocomplete="off">
     </div>
-    <button type="submit" class="btn btn-success">Save changes</button>
-    <button class="btn btn-danger">Delete user</button>
 </form>
-
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <button type="submit" class="btn btn-success" onclick="document.getElementById('edit_user_form').submit();">Save changes</button>
+        <?php 
+            //Don't display button to delete user's own account
+            if($c_user->username != $auth->profile()['username']){
+        ?>
+            <button class="btn btn-danger" onclick="if(confirm('Delete user <?= $c_user->username ?>?')){ window.location.href='./?p=users&delete=<?= $c_user->username ?>';}">Delete user</button>
+            <?php }else{ ?>            
+        <button class="btn btn-default disabled">Delete user</button>
+            <?php } ?>
+    </div>
+</div>
 <div class="row">
     <div class="col-lg-12 col-sm-12">
         <h3>Group memberships</h3>
@@ -144,6 +157,7 @@ $i_list->display();
             $all_perm_list->display();
             
         }else{
+            //PAGE: All Users
             
             //Add new user
             if(isset($_GET['new'])){

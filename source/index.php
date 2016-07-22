@@ -58,7 +58,7 @@ $page_loader->load_page_by_name($page_id);
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href=".">Dashboard</a></li>
+            <li><a href=".">Home</a></li>
             <li><a href=".?p=users">Users</a></li>
             <li><a href=".?p=sessions">Sessions</a></li>
             <li><a href=".?p=groups">Groups</a></li>
@@ -76,7 +76,7 @@ $page_loader->load_page_by_name($page_id);
             <?php $page_loader->load_content(); ?>
         </main>
         
-        <?php $auth->status_bug() ?>
+        <?php $auth->status_bug(); ?>
        
     </body>
 </html>

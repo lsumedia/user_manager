@@ -204,7 +204,7 @@ class access_key{
             
             $username_link = "<a href=\"./?p=users&id=${raw['username']}\">{$raw['username']}</a>";
             
-            $kick_link = "<a href=\"./?p=sessions&kick={$raw['key_value']}\"><i class=\"material-icons red-text\">close</i></a>";
+            $kick_link = "<a href=\"./?p=sessions&kick={$raw['key_value']}\"><button class=\"btn btn-danger\">Kick</button></a>";
             
             $clean[] = [
                 'Username' => $username_link, 
@@ -212,7 +212,7 @@ class access_key{
                 'Last used' => $raw['last_used'],
                 'IP Address' => $ip_link,
                 'Last URL' => $raw['last_url'],
-                'Kick user' => $kick_link,
+                '' => $kick_link,
             ];
         }
         

@@ -158,13 +158,22 @@ class authenticator{
         
     }
     
-    
+    /**
+     * Set access key to session variable
+     * 
+     * @param type $key
+     */
     public function set_session_key($key){
         $config = $this->config();
         $sess_prefix = $config['session_prefix'];
         $_SESSION[$sess_prefix . '_key'] = $key;
     }
     
+    /**
+     * Get session key from session variable 
+     * 
+     * @return boolean
+     */
     public function get_session_key(){
         $config = $this->config();
         $sess_prefix = $config['session_prefix'];
@@ -225,7 +234,7 @@ class authenticator{
     public function profile(){
         $user = $this->user;
         $user['logout_url'] = $this->logout_url();
-        $user['edit_profile_url'] = $config['server_root'] . 'auth/?p=profile&key=' . $this->key;
+        $user['edit_profile_url'] = $this->config()['server_root'] . 'auth/?p=profile&key=' . $this->key;
         return $user;
     }
     
