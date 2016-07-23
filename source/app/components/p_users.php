@@ -180,50 +180,13 @@ class users_page extends page{
 
                 $new_password = $_POST['password'];
                 
-                
-                
-                
-                $new_hash = process_password($new_password);
-                
-                $username_valid = !(preg_match('/\s/',$new_username)) && (strlen($new_username) > 3);
-                $password_valid = (strlen($new_password) > 7);
-                
-                //Validation
-                if($username_valid && $password_valid){
-
-                    //Update user query
-                    $query = "INSERT INTO " . prefix('user') . " (username,fullname,email,dp_url,bio,password) VALUES (?,?,?,?,?,?)";
-
-                    if($stmt = $db->prepare($query)){
-
-                        //Bind variables
-                        $stmt->bind_param("ssssss", $new_username, $new_fullname, $new_email, $new_dp_url, $new_bio, $new_hash);
-
-                        if($stmt->execute()){
-                            echo "<div class=\"alert alert-success\" role=\"alert\">Added new user $new_username</div>";
-
-                        }else{
-                            echo "<div class=\"alert alert-danger\" role=\"alert\">Error adding new user</div>";
-
-                        }
-
-                        $stmt->close();
-                        
-                        $created_user = new user($new_username);
-                        
-                        foreach($default_permissions as $perm_name){
-                            $created_user->add_permission($perm_name);
-                        }
-                    }
-                }else{
-                    if(!$username_valid){
-                        echo "<div class=\"alert alert-danger\" role=\"alert\">Username invalid or taken</div>";
-                    }
-                    if(!$password_valid){
-                        echo "<div class=\"alert alert-danger\" role=\"alert\">Password must be at least 8 characters long</div>";
-                    }
+                //Create new user and write to object
+                try{
+                    $new_user = user::add_user($new_username, $new_fullname, $new_email, $new_dp_url, $new_bio, $new_password);
+                    echo "<div class=\"alert alert-success\" role=\"alert\">Added new user {$new_user->username}</div>";
+                } catch (Exception $ex) {
+                    echo "<div class=\"alert alert-danger\" role=\"alert\">{$ex->getMessage()}</div>";
                 }
-                
             }else if(isset($_GET['delete'])){
                 
                 //User object to delete

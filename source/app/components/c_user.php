@@ -114,8 +114,14 @@ class user{
         }
     }
     
-    public function add_user($username, $fullname, $email, $dp_url, $bio, $password){
-        $new_hash = process_password($password);
+    public static function add_user($username, $fullname, $email, $dp_url, $bio, $password){
+        
+        global $db;
+        global $permissions;
+        global $default_permissions;
+        global $auth;
+        
+        $hash = process_password($password);
                 
         $username_valid = !(preg_match('/\s/',$username)) && (strlen($username) > 3);
         $password_valid = (strlen($password) > 7);
@@ -129,7 +135,7 @@ class user{
             if($stmt = $db->prepare($query)){
 
                 //Bind variables
-                $stmt->bind_param("ssssss", $new_username, $new_fullname, $new_email, $new_dp_url, $new_bio, $new_hash);
+                $stmt->bind_param("ssssss", $username, $fullname, $email, $dp_url, $bio, $hash);
 
                 if($stmt->execute()){
                     echo "<div class=\"alert alert-success\" role=\"alert\">Added new user $new_username</div>";
@@ -138,7 +144,7 @@ class user{
 
                     $stmt->close();
 
-                    $created_user = new user($new_username);
+                    $created_user = new user($username);
 
                     foreach($default_permissions as $perm_name){
                         $created_user->add_permission($perm_name);
@@ -148,7 +154,7 @@ class user{
                 
                     
                 }else{
-                    throw new Exception("Error adding new user");
+                    throw new Exception("Error adding new user: " . $stmt->error);
                 }
             }
         }else{
@@ -309,32 +315,6 @@ class user{
         $hash = md5(strtolower(trim($email)));
         
         return "https://www.gravatar.com/avatar/{$hash}";
-    }
-    
-    /**
-     * new_user
-     * 
-     * Static function to make a new user
-     * @returns user User
-     */
-     public static function new_user($username, $email, $password, $fullname = null, $bio = null, $dpurl = null){
-        global $db;
-        global $default_permissions;
-         
-         
-        //Hash password
-        $password_hash = process_password($password);
-        
-        //Write new user to database
-        
-        //Get object for new user
-        
-        //Add default permissions
-        
-        foreach($default_permissions as $d_perm){
-            //add $d_perm
-        }
-         
     }
     
     public static function list_all(){
