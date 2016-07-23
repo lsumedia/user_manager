@@ -177,25 +177,64 @@ class users_page extends page{
 
                 $new_password = $_POST['password'];
                 
-                $new_hash = process_password($new_password);
-
-                //Update user query
-                $query = "INSERT INTO " . prefix('user') . " (username,fullname,email,dp_url,bio,password) VALUES (?,?,?,?,?,?)";
                 
-                if($stmt = $db->prepare($query)){
-                    
-                    //Bind variables
-                    $stmt->bind_param("ssssss", $new_username, $new_fullname, $new_email, $new_dp_url, $new_bio, $new_hash);
-                    
-                    if($stmt->execute()){
-                        echo "<div class=\"alert alert-success\" role=\"alert\">Added new user $new_username</div>";
+                $new_hash = process_password($new_password);
+                
+                $username_valid = !(preg_match('/\s/',$new_username)) && (strlen($new_username) > 3);
+                $password_valid = (strlen($new_password) > 7);
+                
+                //Validation
+                if($username_valid && $password_valid){
 
-                    }else{
-                        echo "<div class=\"alert alert-danger\" role=\"alert\">Error adding new user</div>";
+                    //Update user query
+                    $query = "INSERT INTO " . prefix('user') . " (username,fullname,email,dp_url,bio,password) VALUES (?,?,?,?,?,?)";
 
+                    if($stmt = $db->prepare($query)){
+
+                        //Bind variables
+                        $stmt->bind_param("ssssss", $new_username, $new_fullname, $new_email, $new_dp_url, $new_bio, $new_hash);
+
+                        if($stmt->execute()){
+                            echo "<div class=\"alert alert-success\" role=\"alert\">Added new user $new_username</div>";
+
+                        }else{
+                            echo "<div class=\"alert alert-danger\" role=\"alert\">Error adding new user</div>";
+
+                        }
+
+                        $stmt->close();
                     }
+                }else{
+                    if(!$username_valid){
+                        echo "<div class=\"alert alert-danger\" role=\"alert\">Username invalid or taken</div>";
+                    }
+                    if(!$password_valid){
+                        echo "<div class=\"alert alert-danger\" role=\"alert\">Password must be at least 8 characters long</div>";
+                    }
+                }
+                
+            }else if(isset($_GET['delete'])){
+                
+                //User object to delete
+                $d_user = new user($_GET['delete']);
+                
+                if($d_user->username != $auth->profile()['username']){
+                
+                    $safe_username = $db->escape_string($d_user->username);
                     
-                    $stmt->close();
+                    //Delete user query
+                    $del_query_1 = "DELETE FROM " . prefix('user') . " WHERE username='{$safe_username}'";
+                    $del_query_2 = "DELETE FROM " . prefix('user_perm') . " WHERE username='{$safe_username}'";
+                    $del_query_3 = "DELETE FROM " . prefix('user_group') . " WHERE username='{$safe_username}'";
+                 
+                    if($db->query($del_query_1) && $db->query($del_query_2) && $db->query($del_query_3)){
+                        echo "<div class=\"alert alert-success\" role=\"alert\">Deleted user {$d_user->username}</div>";
+                    }else{
+                         echo "<div class=\"alert alert-danger\" role=\"alert\">Error deleting user {$d_user->username}: $db->error</div>";
+                    }
+                }else{
+                    echo "<div class=\"alert alert-danger\" role=\"alert\">You cannot delete your own account</div>";
+
                 }
                 
             }
