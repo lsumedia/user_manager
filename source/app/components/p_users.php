@@ -144,6 +144,8 @@ class users_page extends page{
                     </div>
                 </div>
                 <?php
+                self::add_permission_form();
+                
                 $i_list = new ajax_list($c_user->list_individual_permissions(), 'i_perm_list');
                 $i_list->display();
                 ?>
@@ -253,11 +255,22 @@ class users_page extends page{
 
             $list = new ajax_list(user::list_all(), 'user_list');
             $list->display();
+            
+            self::new_user_modal();
         }
-    
-    ?>
 
-<!-- Modal -->
+    
+    }
+    
+    public function header_content() {
+        if(isset($_GET['id'])){
+            $this->title = "";
+        }
+    }
+    
+    public static function new_user_modal(){
+        ?>
+        <!-- Modal -->
 <div class="modal fade" id="new_user_modal" tabindex="-1" role="dialog" aria-labelledby="new_user_modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -300,15 +313,33 @@ class users_page extends page{
     </div>
   </div>
 </div>
-
 <?php
-    
     }
     
-    public function header_content() {
-        if(isset($_GET['id'])){
-            $this->title = "";
+    public static function add_permission_form(){
+        ?>
+        <div class="row">
+            <div class="col-lg-10 col-sm-12">
+                <select class="form-control" >
+                    <?= self::select_permissions() ?>
+                </select>
+            </div>
+            <div class="col-lg-2 col-sm-12">
+                <button type="submit" class="btn btn-success form-control">Add</button>
+            </div>
+        </div>
+        
+        <?php
+    }
+    
+    public static function select_permissions(){
+        global $permissions;
+        
+        $html = '';
+        foreach($permissions as $code => $name){
+            $html .= "<option value\"$code\">$name</option>";
         }
+        return $html;
     }
 }
 

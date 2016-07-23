@@ -35,10 +35,12 @@ $config = [
 $permissions = [
     
     /* Grants user all possible permissions. Do not remove this permission! */
-    'super_admin' => 'All permissions',
+    'super_admin' => 'All permissions (Administrator)',
     
     /* Permission to manage users. Do not remove this permission! */
     'manage_users' => 'Manage user permissions',
+    
+    /* DO NOT EDIT PERMISSIONS ABOVE THIS LINE */
     
     /* Media manager */
     
