@@ -21,6 +21,8 @@ class sessions_page extends page{
 
         $list = new ajax_list(access_key::list_all_clean(), 'user_list');
         $list->display();
+        
+        echo "<script>var timeout = window.setTimeout(function(){ window.location.reload(); }, 30000);</script>";
 
     }
     

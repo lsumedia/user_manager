@@ -47,6 +47,8 @@ class user{
     
     public $permissions;
     
+    public $raw;
+    
     /** 
      * 
      * @param type $username_or_email - Username or email of the targeted user
@@ -92,6 +94,11 @@ class user{
             }
         }
         
+        $this->raw->permissions = $this->permissions;
+        $this->raw->dp_url = $this->dp_url;
+        
+        //Group permissions
+        
         //Super user permission - add all permissions to user object
         if(in_array('super_admin', $this->permissions)){
             $this->permissions = null;
@@ -100,8 +107,9 @@ class user{
             }
         }
         
+        
         //Fetch gravatar
-        if(strlen($this->dp_url < 1)){
+        if(strlen($this->dp_url) < 1){
             $this->get_gravatar_image();
         }
     }
@@ -255,5 +263,12 @@ class user{
         return $clean;
     }
     
+    public function get_data(){
+        $data = [];
+        foreach($this as $key => $value){
+            $data[$key] = $value;
+        }
+        return $data;
+    }
 }
 

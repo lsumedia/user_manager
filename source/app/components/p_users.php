@@ -20,7 +20,7 @@ class users_page extends page{
             <!-- Breadcrumbs -->
             <ol class="breadcrumb">
               <li><a href="./?p=users">Users</a></li>
-              <li><a href="javascript:void();">Edit <?= $_GET['id'] ?></a></li>
+              <li><a href="./?p=users&id=<?= $_GET['id'] ?>">Edit <?= $_GET['id'] ?></a></li>
             </ol>
             <div class="row">
                 <div class="col-lg-12 col-sm-12">
@@ -30,7 +30,7 @@ class users_page extends page{
             <?php
             
             if(isset($_POST['username'])){
-                $e_user = new user($_GET['id']);
+                 $e_user = new user($_GET['id']);
                 
                 //If post request
                 $fullname = $_POST['fullname'];
@@ -78,84 +78,90 @@ class users_page extends page{
 
             }
             
-            $c_user = new user($_GET['id']);
+            //Try to display user data
+            try{
+                
+                $c_user = new user($_GET['id']);
             
-            
-?>
-<!-- Edit user form -->
-<form action="" method="POST" autocomplete="off" id="edit_user_form">
-    <div class="form-group">
-        <label for="user-username">Username</label>
-        <input type="text" class="form-control disabled" id="user-username" readonly placeholder="Username"  name="username" value="<?= $c_user->username ?>">
-    </div>
-    <div class="form-group">
-        <label for="user-fullname">Full name</label>
-        <input type="text" class="form-control" id="user-email" placeholder="Full name" name="fullname" value="<?= $c_user->fullname ?>">
-    </div>
-    <div class="form-group">
-        <label for="user-email">Email address</label>
-        <input type="email" class="form-control" id="user-email" placeholder="Email address" name="email" value="<?= $c_user->email ?>">
-    </div>
-    <div class="form-group">
-        <label for="user-dp">Profile picture</label>
-        <input type="url" class="form-control" id="user-dp" placeholder="Profile picture URL"  name="dp_url" value="<?= $c_user->dp_url ?>">
-    </div>
-    <div class="form-group">
-        <label for="user-bio">Biography</label>
-        <textarea class="form-control" name="bio" id="user-bio"><?= $c_user->bio ?></textarea>
-    </div>
-    <div class="form-group">
-        <label for="user-pw">Reset password</label>
-        <input type="password" class="form-control" id="user-pw" name="reset_password" placeholder="Password reset" autocomplete="off">
-    </div>
-</form>
-<div class="row">
-    <div class="col-lg-12 col-sm-12">
-        <button type="submit" class="btn btn-success" onclick="document.getElementById('edit_user_form').submit();">Save changes</button>
-        <?php 
-            //Don't display button to delete user's own account
-            if($c_user->username != $auth->profile()['username']){
-        ?>
-            <button class="btn btn-danger" onclick="if(confirm('Delete user <?= $c_user->username ?>?')){ window.location.href='./?p=users&delete=<?= $c_user->username ?>';}">Delete user</button>
-            <?php }else{ ?>            
-        <button class="btn btn-default disabled">Delete user</button>
-            <?php } ?>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-12 col-sm-12">
-        <h3>Group memberships</h3>
-    </div>
-</div>
+                ?>
+                <!-- Edit user form -->
+                <form action="" method="POST" autocomplete="off" id="edit_user_form">
+                    <div class="form-group">
+                        <label for="user-username">Username</label>
+                        <input type="text" class="form-control disabled" id="user-username" readonly placeholder="Username"  name="username" value="<?= $c_user->username ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-fullname">Full name</label>
+                        <input type="text" class="form-control" id="user-email" placeholder="Full name" name="fullname" value="<?= $c_user->fullname ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email">Email address</label>
+                        <input type="email" class="form-control" id="user-email" placeholder="Email address" name="email" value="<?= $c_user->email ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-dp">Profile picture (leave blank to use Gravatar)</label>
+                        <input type="url" class="form-control" id="user-dp" placeholder="Profile picture URL"  name="dp_url" value="<?= $c_user->raw->dp_url ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-bio">Biography</label>
+                        <textarea class="form-control" name="bio" id="user-bio"><?= $c_user->bio ?></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-pw">Reset password</label>
+                        <input type="password" class="form-control" id="user-pw" name="reset_password" placeholder="Password reset" autocomplete="off">
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <button type="submit" class="btn btn-success" onclick="document.getElementById('edit_user_form').submit();">Save changes</button>
+                        <?php 
+                            //Don't display button to delete user's own account
+                            if($c_user->username != $auth->profile()['username']){
+                        ?>
+                            <button class="btn btn-danger" onclick="if(confirm('Delete user <?= $c_user->username ?>?')){ window.location.href='./?p=users&delete=<?= $c_user->username ?>';}">Delete user</button>
+                            <?php }else{ ?>            
+                        <button class="btn btn-default disabled">Delete user</button>
+                            <?php } ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <h3>Group memberships</h3>
+                    </div>
+                </div>
 
-<!-- Permissions edit section -->
-<div class="row">
-    <div class="col-lg-12 col-sm-12">
-        <h3>Permissions</h3>
-    </div>
-</div>
+                <!-- Permissions edit section -->
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <h3>Permissions</h3>
+                    </div>
+                </div>
 
-<!-- Individual permissions -->
-<div class="row">
-    <div class="col-lg-12 col-sm-12">
-        <h4>User individual permissions</h4>
-    </div>
-</div>
-<?php
-$i_list = new ajax_list($c_user->list_individual_permissions(), 'i_perm_list');
-$i_list->display();
-?>
+                <!-- Individual permissions -->
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <h4>User individual permissions</h4>
+                    </div>
+                </div>
+                <?php
+                $i_list = new ajax_list($c_user->list_individual_permissions(), 'i_perm_list');
+                $i_list->display();
+                ?>
 
-<!-- All permissions -->
-<div class="row">
-    <div class="col-lg-12 col-sm-12">
-        <h4>All user/group permissions</h4>
-    </div>
-</div>
-<?php            
-            $all_perm_list = new ajax_list($c_user->list_permissions(), 'all_perm_list');
-            $all_perm_list->display();
-            
+                <!-- All permissions -->
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <h4>All user/group permissions</h4>
+                    </div>
+                </div>
+                <?php            
+                $all_perm_list = new ajax_list($c_user->list_permissions(), 'all_perm_list');
+                $all_perm_list->display();
+
+                }catch(Exception $e){
+
+                echo "<div class=\"alert alert-danger\" role=\"alert\">Username \"{$_GET['id']}\" not recognised</div>";
+            }
         }else{
             //PAGE: All Users
             
@@ -223,19 +229,19 @@ $i_list->display();
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="user-username">Username</label>
+                    <label for="user-username">Username*</label>
                     <input type="text" class="form-control" id="user-username" placeholder="Username"  name="username" value="<?= $c_user->username ?>">
                 </div>
                 <div class="form-group">
-                    <label for="user-fullname">Full name</label>
+                    <label for="user-fullname">Full name*</label>
                     <input type="text" class="form-control" id="user-email" placeholder="Full name" name="fullname" value="<?= $c_user->fullname ?>">
                 </div>
                 <div class="form-group">
-                    <label for="user-email">Email address</label>
+                    <label for="user-email">Email address*</label>
                     <input type="email" class="form-control" id="user-email" placeholder="Email address" name="email" value="<?= $c_user->email ?>">
                 </div>
                 <div class="form-group">
-                    <label for="user-dp">Profile picture</label>
+                    <label for="user-dp">Profile picture (leave blank to use Gravatar)</label>
                     <input type="url" class="form-control" id="user-dp" placeholder="Profile picture URL"  name="dp_url" value="<?= $c_user->dp_url ?>">
                 </div>
                 <div class="form-group">
@@ -243,7 +249,7 @@ $i_list->display();
                     <textarea class="form-control" name="bio" id="user-bio"><?= $c_user->bio ?></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="user-pw">Password</label>
+                    <label for="user-pw">Password*</label>
                     <input type="password" class="form-control" id="user-pw" name="password" placeholder="Password">
                 </div>
             </div>

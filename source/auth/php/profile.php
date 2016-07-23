@@ -82,7 +82,7 @@ if(isset($_GET['badpassword'])){ ?>
     </div>
     <div class="form_row">
         <p>Profile picture URL (Leave blank to use Gravatar)</p>
-        <input type="url" name="dp_url" value="<?= $profile['dp_url'] ?>" />
+        <input type="url" name="dp_url" value="<?= $profile['raw']['dp_url'] ?>" />
     </div>
     <div class="form_row">
         <p>Biography</p>
