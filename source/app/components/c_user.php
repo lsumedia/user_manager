@@ -217,9 +217,13 @@ class user{
     
     
     public function get_gravatar_image(){
-        $hash = md5(strtolower(trim($this->email)));
+        $this->dp_url = self::calculate_gravatar_url($this->email);
+    }
+    
+    public static function calculate_gravatar_url($email){
+        $hash = md5(strtolower(trim($email)));
         
-        $this->dp_url = "https://www.gravatar.com/avatar/{$hash}";
+        return "https://www.gravatar.com/avatar/{$hash}";
     }
     
     /**
@@ -261,6 +265,31 @@ class user{
             $clean[] = ['Username' => $row['username'], 'Full name' => $row['fullname'] , 'Email Address' => $row['email'], 'action' => './?p=users&id=' . $row['username']];
         }
         return $clean;
+    }
+    
+    /**
+     * Return array of all users' public information (excluding passwords & emails)
+     */
+    public static function list_public_raw(){
+        global $db;
+        
+        $query = "SELECT username, fullname, bio, email, dp_url FROM " . prefix('user');
+        
+        $res = [];
+        
+        $result = $db->query($query);
+        
+        while($row = $result->fetch_assoc()){
+            if(strlen($row['dp_url']) < 1){
+                $row['dp_url'] = self::calculate_gravatar_url($row['email']);
+            }
+            
+            //Obscure email
+            unset($row['email']);
+            
+            $res[] = $row;
+        }
+        return $res;
     }
     
     public function get_data(){

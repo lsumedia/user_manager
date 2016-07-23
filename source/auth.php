@@ -61,6 +61,18 @@ if(isset($_GET['check_key'])){
     $p_user = new user($username);
     
     $response = $p_user;
+}else if(isset($_GET['public_user_data'])){
+    /* Return basic data for all SSO users 
+     * 
+     * Array of user objects each containing the following fields:
+     * 
+     * username
+     * fullname
+     * bio
+     * dp_url
+     */
+    
+    $response = user::list_public_raw();
 }
 
 echo json_encode($response);

@@ -27,7 +27,7 @@ class authenticator{
         'custom_redirect' => null
     ];
     
-    private function config(){
+    private static function config(){
         $config = self::$config;
         $config['server_address'] = $config['server_root'] . 'auth.php';
         $config['login_page_address'] = $config['server_root'] . 'auth/?p=login';
@@ -44,7 +44,7 @@ class authenticator{
     
     public function check_login(){
         
-        $config = $this->config();
+        $config = self::config();
         
         $sess_prefix = $config['session_prefix'];
         
@@ -80,7 +80,7 @@ class authenticator{
     
     public function server_check_key(){
         
-        $srv_addr = $this->config()['server_address'];
+        $srv_addr = self::config()['server_address'];
         
         $user_ip = $_SERVER['REMOTE_ADDR'];
         
@@ -105,7 +105,7 @@ class authenticator{
      */
     public function server_check_permission($permission){
        
-        $config = $this->config();
+        $config = self::config();
         $srv_addr = $config['server_address'];
         
         $api_url = $srv_addr . '?check_perm&key=' . $this->key . '&perm_name=' . $permission;
@@ -130,7 +130,7 @@ class authenticator{
      */
     public function server_get_profile(){
         
-        $config = $this->config();
+        $config = self::config();
         $srv_addr = $config['server_address'];
         
         $api_url = $srv_addr . '?user_profile&key=' . $this->key;
@@ -145,18 +145,6 @@ class authenticator{
         return false;
     }
     
-    /**
-     * server_kill_key - liase with the server to invalidate the user's key
-     * (logout operation)
-     */
-    public function server_kill_key(){
-        
-        $config = $this->config();
-        $srv_addr = $config['server_address'];
-        
-        $api_url = $srv_addr . '?action=invalidate&key=' . $this->key();
-        
-    }
     
     /**
      * Set access key to session variable
@@ -164,7 +152,7 @@ class authenticator{
      * @param type $key
      */
     public function set_session_key($key){
-        $config = $this->config();
+        $config = self::config();
         $sess_prefix = $config['session_prefix'];
         $_SESSION[$sess_prefix . '_key'] = $key;
     }
@@ -175,7 +163,7 @@ class authenticator{
      * @return boolean
      */
     public function get_session_key(){
-        $config = $this->config();
+        $config = self::config();
         $sess_prefix = $config['session_prefix'];
         if(isset($_SESSION[$sess_prefix . '_key'])){
             $key = $_SESSION[$sess_prefix . '_key'];
@@ -186,7 +174,7 @@ class authenticator{
     }
     
     public function clear_session_key(){
-        $config = $this->config();
+        $config = self::config();
         $sess_prefix = $config['session_prefix'];
         $_SESSION[$sess_prefix . '_key'] = null;
         unset($_SESSION[$sess_prefix . '_key']);
@@ -217,7 +205,7 @@ class authenticator{
     }
     
     public function redirect_to_login(){
-        $config = $this->config();
+        $config = self::config();
         
         /* Send current page URL in address to ensure the user can get back here */
         $current = rawurlencode($this->redirect_url());
@@ -228,13 +216,13 @@ class authenticator{
     
     
     public function logout_url(){
-        return $this->config()['logout_page_address'] . '&key=' . $this->key . '&source=' . urlencode($this->redirect_url());
+        return self::config()['logout_page_address'] . '&key=' . $this->key . '&source=' . urlencode($this->redirect_url());
     }
     
     public function profile(){
         $user = $this->user;
         $user['logout_url'] = $this->logout_url();
-        $user['edit_profile_url'] = $this->config()['server_root'] . 'auth/?p=profile&key=' . $this->key;
+        $user['edit_profile_url'] = self::config()['server_root'] . 'auth/?p=profile&key=' . $this->key;
         return $user;
     }
     
@@ -254,7 +242,7 @@ class authenticator{
      * and a sign out button
      */
     public function status_bug(){
-        $config = $this->config();
+        $config = self::config();
         $sess_prefix = $config['session_prefix'];
         
         $page_prefix = $sess_prefix . '_profile';
@@ -333,6 +321,17 @@ class authenticator{
 </div>        
 <?php
         
+    }
+    
+    /* Non-authentication SSO data functions */
+    public static function server_get_users(){
+        $config = self::config();
+        
+        $srv_addr = $config['server_address'];
+        
+        $api_url = $srv_addr . '?public_user_data';
+        
+        return json_decode(file_get_contents($api_url),true);
     }
     
 }

@@ -7,6 +7,7 @@ class dashboard_page extends page{
     
     public function content() {
         echo "Hello world!";
+        
     }
     
     public function header_content() {
