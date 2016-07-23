@@ -121,13 +121,16 @@ class user{
         global $default_permissions;
         global $auth;
         
+        //Hash password
         $hash = process_password($password);
                 
+        //Validation variables
         $username_valid = !(preg_match('/\s/',$username)) && (strlen($username) > 3);
         $password_valid = (strlen($password) > 7);
+        $email_valid = (filter_var($email, FILTER_VALIDATE_EMAIL) !== false);
 
         //Validation
-        if($username_valid && $password_valid){
+        if($username_valid && $password_valid && $email_valid){
 
             //Update user query
             $query = "INSERT INTO " . prefix('user') . " (username,fullname,email,dp_url,bio,password) VALUES (?,?,?,?,?,?)";
@@ -138,10 +141,7 @@ class user{
                 $stmt->bind_param("ssssss", $username, $fullname, $email, $dp_url, $bio, $hash);
 
                 if($stmt->execute()){
-                    echo "<div class=\"alert alert-success\" role=\"alert\">Added new user $new_username</div>";
-
-                
-
+                    
                     $stmt->close();
 
                     $created_user = new user($username);
@@ -163,6 +163,9 @@ class user{
             }
             if(!$password_valid){
                 throw new Exception("Password must be at least 8 characters long");
+            }
+            if(!$email_valid){
+                throw new Exception("Please enter a valid email address");
             }
         }
         return false;
