@@ -114,6 +114,55 @@ class user{
         }
     }
     
+    public function add_user($username, $fullname, $email, $dp_url, $bio, $password){
+        $new_hash = process_password($password);
+                
+        $username_valid = !(preg_match('/\s/',$username)) && (strlen($username) > 3);
+        $password_valid = (strlen($password) > 7);
+
+        //Validation
+        if($username_valid && $password_valid){
+
+            //Update user query
+            $query = "INSERT INTO " . prefix('user') . " (username,fullname,email,dp_url,bio,password) VALUES (?,?,?,?,?,?)";
+
+            if($stmt = $db->prepare($query)){
+
+                //Bind variables
+                $stmt->bind_param("ssssss", $new_username, $new_fullname, $new_email, $new_dp_url, $new_bio, $new_hash);
+
+                if($stmt->execute()){
+                    echo "<div class=\"alert alert-success\" role=\"alert\">Added new user $new_username</div>";
+
+                
+
+                    $stmt->close();
+
+                    $created_user = new user($new_username);
+
+                    foreach($default_permissions as $perm_name){
+                        $created_user->add_permission($perm_name);
+                    }
+
+                    return $created_user;
+                
+                    
+                }else{
+                    throw new Exception("Error adding new user");
+                }
+            }
+        }else{
+            if(!$username_valid){
+                throw new Exception("Username invalid or taken");
+            }
+            if(!$password_valid){
+                throw new Exception("Password must be at least 8 characters long");
+            }
+        }
+        return false;
+       
+    }
+    
     public function check_password($password){
         if($this->password_hash == process_password($password)){
             return true;
@@ -145,16 +194,52 @@ class user{
         return false;
     }
     
+    /** Remove permission from users
+     * 
+     * true if succeeded, false if failed
+     * @global type $db
+     * @param type $perm_name
+     * @return boolean
+     */
     public function add_permission($perm_name){
+        global $db;
+        
         //If user does not already have this permission
         if(!$this->has_permission($perm_name)){
             //Add permission
             $query = "INSERT INTO " . prefix('user_perm') . " (username,perm_name) VALUES (?,?)";
+            
+            if($stmt = $db->prepare($query)){
+                $stmt->bind_param("ss", $this->username, $perm_name);
+                if($stmt->execute()){
+                    $stmt->close();
+                    return true;
+                }
+                $stmt->close();
+            }
+            return false;
         }
     }
     
+    /**
+     * Remove permission from user
+     * 
+     * true if succeeded, false if failed
+     * @param type $perm_name
+     * @return boolean
+     */
     public function remove_permission($perm_name){
         $query = "DELETE FROM " . prefix('user_perm') . " WHERE username = ? AND perm_name = ?";
+        
+        if($stmt = $db->prepare($query)){
+                $stmt->bind_param("ss", $this->username, $perm_name);
+                if($stmt->execute()){
+                    $stmt->close();
+                    return true;
+                }
+                $stmt->close();
+            }
+            return false;
     }
     
     public function all_permissions(){

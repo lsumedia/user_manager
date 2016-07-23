@@ -10,6 +10,7 @@ class users_page extends page{
     public function content() {
         global $db;
         global $auth;
+        global $default_permissions;
         
         if(isset($_GET['id'])){
             //Edit user page
@@ -180,6 +181,8 @@ class users_page extends page{
                 $new_password = $_POST['password'];
                 
                 
+                
+                
                 $new_hash = process_password($new_password);
                 
                 $username_valid = !(preg_match('/\s/',$new_username)) && (strlen($new_username) > 3);
@@ -205,6 +208,12 @@ class users_page extends page{
                         }
 
                         $stmt->close();
+                        
+                        $created_user = new user($new_username);
+                        
+                        foreach($default_permissions as $perm_name){
+                            $created_user->add_permission($perm_name);
+                        }
                     }
                 }else{
                     if(!$username_valid){
