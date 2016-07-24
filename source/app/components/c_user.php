@@ -329,6 +329,12 @@ class user{
         
     }
     
+    /**ajaxList compatible dataset for displaying/editing
+     * user individual permissions
+     * 
+     * @global type $permissions
+     * @return type
+     */
     public function list_individual_permissions(){
         global $permissions;
         
@@ -339,7 +345,7 @@ class user{
             $clean[] = [
                 'Permission' => $permissions[$perm_name], 
                 'Permission code' => $perm_name, 
-                '' => "<a href=\"./?p=users&id={$this->username}&remove_perm={$perm_name}\">d</a>"
+                '' => "<a href=\"./?p=users&id={$this->username}&remove_perm={$perm_name}\"><button class=\"btn btn-danger pull-right\">Remove</button></a>"
                 ];
         }
         

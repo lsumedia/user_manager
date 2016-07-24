@@ -27,6 +27,11 @@ class authenticator{
         'custom_redirect' => null
     ];
     
+    /**
+     * Always use this to pull config data - adds in necessary URLs
+     * 
+     * @return string
+     */
     private static function config(){
         $config = self::$config;
         $config['server_address'] = $config['server_root'] . 'auth.php';
@@ -51,25 +56,27 @@ class authenticator{
         
         //Set or overwrite session stored key
         if($key = $this->get_url_key()){ 
-            
+            //GET key overwrites session key
             $this->set_session_key($key);
             
         }else if($key = $this->get_post_key()){
-            
+            //POST key overwrites session key
             $this->set_session_key($key);
             
         }
         
         if($this->get_session_key() == false){
-            /* Redirect to login page if no valid key set */
+            //Redirect to login page if no valid key set
             $this->redirect_to_login();
-            /* Ensure function is broken, even though script should die */
+            //Ensure function is broken, even though script should die
             return false;
         }
         
         /* If session key invalid, not registered or timed out */
         if($this->server_check_key() == false ){
+            //Clear invalid key from session
             $this->clear_session_key();
+            //Redirect to login page
             $this->redirect_to_login();
             return false;
         }
