@@ -80,6 +80,27 @@ class user{
         
         $stmt->close();
         
+        $this->fetch_permissions();
+        
+        $this->raw->dp_url = $this->dp_url;
+        
+        //Fetch gravatar
+        if(strlen($this->dp_url) < 1){
+            $this->get_gravatar_image();
+        }
+    }
+    
+    /**
+     * Fetch permissions data from database
+     * 
+     * @global type $db
+     */
+    private function fetch_permissions(){
+        global $db;
+        global $permissions;
+        
+        $this->permissions = null;
+        
         //Get user permissions
         $perm_query = "SELECT perm_name FROM " . prefix('user_perm') . " WHERE username=?";
         
@@ -95,7 +116,6 @@ class user{
         }
         
         $this->raw->permissions = $this->permissions;
-        $this->raw->dp_url = $this->dp_url;
         
         //Group permissions
         
@@ -105,12 +125,6 @@ class user{
             foreach($permissions as $perm => $title){
                 $this->permissions[] = $perm;
             }
-        }
-        
-        
-        //Fetch gravatar
-        if(strlen($this->dp_url) < 1){
-            $this->get_gravatar_image();
         }
     }
     
@@ -147,7 +161,11 @@ class user{
                     $created_user = new user($username);
 
                     foreach($default_permissions as $perm_name){
-                        $created_user->add_permission($perm_name);
+                        try{
+                            $created_user->add_permission($perm_name);
+                        }catch(Exception $e){
+                            throw new Exception("Some default permissions were not valid. Please check your config file.");
+                        }
                     }
 
                     return $created_user;
@@ -212,9 +230,10 @@ class user{
      */
     public function add_permission($perm_name){
         global $db;
+        global $permissions;
         
         //If user does not already have this permission
-        if(!$this->has_permission($perm_name)){
+        if(!$this->has_permission($perm_name) && array_key_exists($perm_name, $permissions)){
             //Add permission
             $query = "INSERT INTO " . prefix('user_perm') . " (username,perm_name) VALUES (?,?)";
             
@@ -222,12 +241,18 @@ class user{
                 $stmt->bind_param("ss", $this->username, $perm_name);
                 if($stmt->execute()){
                     $stmt->close();
+                    $this->fetch_permissions();
                     return true;
+                }else{
+                    throw new Exception($stmt->error);
                 }
                 $stmt->close();
+            }else{
+                throw new Exception($db->error);
             }
-            return false;
         }
+        throw new Exception("User already has permission or permission \"{$perm_name}\" is not valid");
+        return false;
     }
     
     /**
@@ -238,17 +263,25 @@ class user{
      * @return boolean
      */
     public function remove_permission($perm_name){
+        global $db;
+        
         $query = "DELETE FROM " . prefix('user_perm') . " WHERE username = ? AND perm_name = ?";
         
         if($stmt = $db->prepare($query)){
-                $stmt->bind_param("ss", $this->username, $perm_name);
-                if($stmt->execute()){
+            $stmt->bind_param("ss", $this->username, $perm_name);
+            if($stmt->execute()){
+               
+                if($stmt->affected_rows > 0){
                     $stmt->close();
                     return true;
+                }else{
+                    throw new Exception("Permission \"$perm_name\" not removed from $this->username - unknown error");
                 }
-                $stmt->close();
             }
-            return false;
+            $stmt->close();
+        }
+        throw new Exception("Failed to remove permission $perm_name");
+        return false;
     }
     
     public function all_permissions(){
@@ -303,7 +336,11 @@ class user{
         $clean = [];
         
         foreach($raw as $perm_name){
-            $clean[] = ['Permission' => $permissions[$perm_name], 'Permission code' => $perm_name];
+            $clean[] = [
+                'Permission' => $permissions[$perm_name], 
+                'Permission code' => $perm_name, 
+                '' => "<a href=\"./?p=users&id={$this->username}&remove_perm={$perm_name}\">d</a>"
+                ];
         }
         
         return $clean;

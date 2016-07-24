@@ -11,6 +11,7 @@ class users_page extends page{
         global $db;
         global $auth;
         global $default_permissions;
+        global $permissions;
         
         if(isset($_GET['id'])){
             //Edit user page
@@ -83,6 +84,33 @@ class users_page extends page{
             try{
                 
                 $c_user = new user($_GET['id']);
+                
+                //Add permission script
+                if(isset($_POST['perm_name'])){
+                    $add_perm_name = $_POST['perm_name'];
+                    try{
+                        $c_user->add_permission($add_perm_name);
+                        echo "<div class=\"alert alert-success\" role=\"alert\">Added '{$permissions[$add_perm_name]}' to user {$c_user->username}</div>";
+                    } catch (Exception $ex) {
+                        echo "<div class=\"alert alert-danger role=\"alert\">{$ex->getMessage()}</div>";
+                    }
+                }
+                
+                //Remove permission script
+                if(isset($_GET['remove_perm'])){
+                    $remove_perm_name = $_GET['remove_perm'];
+                    if($c_user->username != $auth->profile()['username']){
+                        try{
+
+                            $c_user->remove_permission($remove_perm_name);
+                            echo "<div class=\"alert alert-success\" role=\"alert\">Removed '{$permissions[$remove_perm_name]}' from user {$c_user->username}</div>";
+                        } catch (Exception $ex) {
+                            echo "<div class=\"alert alert-danger role=\"alert\">{$ex->getMessage()}</div>";
+                        }
+                    }else{
+                        echo "<div class=\"alert alert-danger role=\"alert\">You cannot remove permissions from your own account</div>";
+                    }
+                }
             
                 ?>
                 <!-- Edit user form -->
@@ -145,7 +173,7 @@ class users_page extends page{
                     </div>
                 </div>
                 <?php
-                self::add_permission_form();
+                self::add_permission_form($c_user);
                 
                 $i_list = new ajax_list($c_user->list_individual_permissions(), 'i_perm_list');
                 $i_list->display();
@@ -288,28 +316,31 @@ class users_page extends page{
 <?php
     }
     
-    public static function add_permission_form(){
+    public static function add_permission_form($user){
         ?>
         <div class="row">
-            <div class="col-lg-10 col-sm-12">
-                <select class="form-control" >
-                    <?= self::select_permissions() ?>
-                </select>
-            </div>
-            <div class="col-lg-2 col-sm-12">
-                <button type="submit" class="btn btn-success form-control">Add</button>
-            </div>
+            <form method="POST" action="./?p=users&id=<?= $user->username ?>">
+                <div class="col-lg-10 col-sm-12">
+                    <select class="form-control" name="perm_name" >
+                        <?= self::select_permissions() ?>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-sm-12">
+                    <button type="submit" class="btn btn-success form-control">Add</button>
+                </div>
+            </form>
         </div>
         
         <?php
     }
+    
     
     public static function select_permissions(){
         global $permissions;
         
         $html = '';
         foreach($permissions as $code => $name){
-            $html .= "<option value\"$code\">$name</option>";
+            $html .= "<option value=\"$code\">$name</option>";
         }
         return $html;
     }
