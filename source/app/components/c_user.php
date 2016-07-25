@@ -49,8 +49,6 @@ class user{
     
     public $group_ids;
     
-    public $groups;
-    
     public $raw;
     
     /** 
@@ -157,7 +155,7 @@ class user{
         global $db;
         global $permissions;
         
-        $this->groups = null;
+        $this->group_ids = null;
         
         //Get user permissions
         $perm_query = "SELECT group_id FROM " . prefix('user_group') . " WHERE username=?";
