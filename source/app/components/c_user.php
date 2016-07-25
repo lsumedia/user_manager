@@ -47,6 +47,10 @@ class user{
     
     public $permissions;
     
+    public $group_ids;
+    
+    public $groups;
+    
     public $raw;
     
     /** 
@@ -117,7 +121,27 @@ class user{
         
         $this->raw->permissions = $this->permissions;
         
+        $stmt2->close();
+        
         //Group permissions
+        try{
+            $this->fetch_groups();
+
+            foreach($this->group_ids as $one_group_id){
+
+                $one_group = new group($one_group_id);
+                
+                $group_perms = $one_group->get_permissions();
+                
+                foreach($group_perms as $one_perm){
+                    if(!in_array($one_perm, $this->permissions)){
+                        $this->permissions[] = $one_perm;
+                    }
+                }
+            }
+        } catch (Exception $ex) {
+
+        }
         
         //Super user permission - add all permissions to user object
         if(in_array('super_admin', $this->permissions)){
@@ -126,6 +150,30 @@ class user{
                 $this->permissions[] = $perm;
             }
         }
+    }
+    
+    public function fetch_groups(){
+        
+        global $db;
+        global $permissions;
+        
+        $this->groups = null;
+        
+        //Get user permissions
+        $perm_query = "SELECT group_id FROM " . prefix('user_group') . " WHERE username=?";
+        
+        if($stmt2 = $db->prepare($perm_query)){
+            $stmt2->bind_param('s', $this->username);
+
+            $stmt2->execute();
+            $stmt2->bind_result($group_id);
+
+            while($stmt2->fetch()){
+                $this->group_ids[] = $group_id;
+            }
+        }
+        
+        $stmt2->close();
     }
     
     public static function add_user($username, $fullname, $email, $dp_url, $bio, $password){

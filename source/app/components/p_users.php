@@ -188,7 +188,7 @@ class users_page extends page{
                 <?php            
                 $all_perm_list = new ajax_list($c_user->list_permissions(), 'all_perm_list');
                 $all_perm_list->display();
-
+                
                 }catch(Exception $e){
 
                 echo "<div class=\"alert alert-danger\" role=\"alert\">Username \"{$_GET['id']}\" not recognised</div>";
