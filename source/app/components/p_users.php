@@ -374,7 +374,7 @@ class users_page extends page{
     public static function select_permissions(){
         global $permissions;
         
-        $html = '';
+        $html = '<option value="">--</option>';
         foreach($permissions as $code => $name){
             $html .= "<option value=\"$code\">$name</option>";
         }
@@ -402,7 +402,7 @@ class users_page extends page{
     public static function select_groups(){
         global $permissions;
         
-        $html = '';
+        $html = '<option value="">--</option>';
         foreach(group::list_all_raw() as $group){
             $html .= "<option value=\"{$group['group_id']}\">{$group['group_name']}</option>";
         }
