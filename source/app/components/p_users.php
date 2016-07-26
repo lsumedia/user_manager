@@ -168,15 +168,15 @@ class users_page extends page{
                 </form>
                 <div class="row">
                     <div class="col-lg-12 col-sm-12">
-                        <button type="submit" class="btn btn-success" onclick="document.getElementById('edit_user_form').submit();">Save changes</button>
                         <?php 
                             //Don't display button to delete user's own account
                             if($c_user->username != $auth->profile()['username']){
                         ?>
-                            <button class="btn btn-danger" onclick="if(confirm('Delete user <?= $c_user->username ?>?')){ window.location.href='./?p=users&delete=<?= $c_user->username ?>';}">Delete user</button>
+                            <button class="btn btn-danger pull-right" onclick="if(confirm('Delete user <?= $c_user->username ?>?')){ window.location.href='./?p=users&delete=<?= $c_user->username ?>';}">Delete user</button>
                             <?php }else{ ?>            
-                        <button class="btn btn-default disabled">Delete user</button>
+                        <button class="btn btn-default disabled pull-right">Delete user</button>
                             <?php } ?>
+                        <button type="submit" class="btn btn-success pull-right" style="margin-right:4px;" onclick="document.getElementById('edit_user_form').submit();">Save changes</button>
                     </div>
                 </div>
                 <div class="row">
