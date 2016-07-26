@@ -206,12 +206,17 @@ class access_key{
             
             $kick_link = "<a href=\"./?p=sessions&kick={$raw['key_value']}\"><button class=\"btn btn-danger\">Kick</button></a>";
             
+            $visit_link = "<a href=\"{$raw['last_url']}\">{$raw['last_url']}</a>";
+            
+            $session_length = floor((strtotime($raw['last_used']) - strtotime($raw['key_created'])) / 60) . ' minutes';
+            
             $clean[] = [
                 'Username' => $username_link, 
                 'Logged in' => $raw['key_created'],
                 'Last used' => $raw['last_used'],
+                'Session length' => $session_length,
                 'IP Address' => $ip_link,
-                'Last URL' => $raw['last_url'],
+                'Last URL' => $visit_link,
                 '' => $kick_link,
             ];
         }
