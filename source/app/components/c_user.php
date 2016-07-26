@@ -334,6 +334,92 @@ class user{
         return $this->permissions;
     }
     
+    public function list_groups(){
+        
+        $list = $this->permissions;
+        
+        $clean = [];
+        
+        foreach($this->group_ids as $group_id){
+            $group = new group($group_id);
+            $clean[] = [
+                "Group name" => $group->group_name, 
+                "Group description" => $group->description,
+                "action" => "./?p=groups&id=" . $group->group_id,
+                '' => "<a href=\"./?p=users&id={$this->username}&remove_group={$group->group_id}\"><button class=\"btn btn-danger pull-right\">Remove</button></a>"
+            ];
+        }
+        
+        return $clean;
+    }
+    
+    /** Remove group from users
+     * 
+     * true if succeeded, false if failed
+     */
+    public function add_group($group_id){
+        global $db;
+        
+        //If user isn't in the group and the group exists
+        if(!$this->in_group($perm_name) && (new group($group_id) !== false)){
+            //Add permission
+            $query = "INSERT INTO " . prefix('user_group') . " (username,group_id) VALUES (?,?)";
+            
+            if($stmt = $db->prepare($query)){
+                $stmt->bind_param("si", $this->username, $group_id);
+                if($stmt->execute()){
+                    $stmt->close();
+                    //Update groups and permissions
+                    $this->fetch_permissions();
+                    return true;
+                }else{
+                    throw new Exception($stmt->error);
+                }
+                $stmt->close();
+            }else{
+                throw new Exception($db->error);
+            }
+        }
+        throw new Exception("User already in group or group \"{$group_id}\" is not valid");
+        return false;
+    }
+    
+    /**
+     * Remove group from user
+     * 
+     * true if succeeded, false if failed
+     * @param type $perm_name
+     * @return boolean
+     */
+    public function remove_group($group_id){
+        global $db;
+        
+        $query = "DELETE FROM " . prefix('user_group') . " WHERE username = ? AND group_id = ?";
+        
+        if($stmt = $db->prepare($query)){
+            $stmt->bind_param("si", $this->username, $group_id);
+            if($stmt->execute()){
+               
+                if($stmt->affected_rows > 0){
+                    $stmt->close();
+                    $this->fetch_permissions();
+                    return true;
+                }else{
+                    throw new Exception("$this->username not removed from group $group_id - unknown error");
+                }
+            }
+            $stmt->close();
+        }
+        throw new Exception("Failed to remove from group $group_id");
+        return false;
+    }
+    
+    public function in_group($group_id){
+        if(in_array($group_id, $this->group_ids)){
+            return true;
+        }
+        return false;
+    }
     /**
      * list_permissions
      * 

@@ -34,6 +34,8 @@ class group {
                 $this->description = $desc;
             }else{
                 throw new Exception("Group not found");
+                $stmt->close();
+                return false;
             }
 
             $stmt->close();
@@ -42,6 +44,7 @@ class group {
             $this->fetch_members();
         }else{
             throw new Exception("Error accessing the database");
+            return false;
         }
         
     }
@@ -97,5 +100,42 @@ class group {
     
     public function get_members(){
         return $this->members;
+    }
+    
+    public static function list_all_raw(){
+        global $db;
+        $query = "SELECT group_id, group_name, description FROM " . prefix('group');
+        
+        $results = [];
+        
+        if($stmt = $db->prepare($query)){
+            $stmt->execute();
+
+            $stmt->bind_result($id, $name, $desc);
+            
+            
+            while($stmt->fetch()){
+                $results[] = ['group_id' => $id, 'group_name' => $name, 'description' => $desc];
+            }
+
+            $stmt->close();
+            
+        }else{
+            throw new Exception("Error accessing the database");
+        }
+        
+        return $results;
+    }
+    
+    public static function list_all_objects(){
+        $raw = self::list_all_raw();
+        
+        $objs = [];
+        
+        foreach($raw as $one_raw){
+            $objs[] = new group($one_raw['group_id']);
+        }
+        
+        return $objs;
     }
 }

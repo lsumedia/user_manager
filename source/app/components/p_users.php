@@ -32,7 +32,7 @@ class users_page extends page{
             <?php
             
             if(isset($_POST['username'])){
-                 $e_user = new user($_GET['id']);
+                $e_user = new user($_GET['id']);
                 
                 //If post request
                 $fullname = $_POST['fullname'];
@@ -82,7 +82,7 @@ class users_page extends page{
             
             //Try to display user data
             try{
-                
+                //Object for applying permissions/groups updates to
                 $c_user = new user($_GET['id']);
                 
                 //Add permission script
@@ -111,7 +111,33 @@ class users_page extends page{
                         echo "<div class=\"alert alert-danger role=\"alert\">You cannot remove permissions from your own account</div>";
                     }
                 }
-            
+                
+                //Add group script
+                if(isset($_POST['group_id'])){
+                    $add_group_id = $_POST['group_id'];
+                    try{
+                        $c_user->add_group($add_group_id);
+                        echo "<div class=\"alert alert-success\" role=\"alert\">Added user {$c_user->username} to group {$add_group_id}</div>";
+                    } catch (Exception $ex) {
+                        echo "<div class=\"alert alert-danger role=\"alert\">{$ex->getMessage()}</div>";
+                    }
+                }
+                //Remove group script
+                if(isset($_GET['remove_group'])){
+                    $remove_group_id = $_GET['remove_group'];
+                    if($c_user->username != $auth->profile()['username']){
+                        try{
+
+                            $c_user->remove_group($remove_group_id);
+                            echo "<div class=\"alert alert-success\" role=\"alert\">Removed user {$c_user->username} from group </div>";
+                        } catch (Exception $ex) {
+                            echo "<div class=\"alert alert-danger role=\"alert\">{$ex->getMessage()}</div>";
+                        }
+                    }else{
+                        echo "<div class=\"alert alert-danger role=\"alert\">You cannot remove yourself from a group</div>";
+                    }
+                }
+                
                 ?>
                 <!-- Edit user form -->
                 <form action="" method="POST" autocomplete="off" id="edit_user_form">
@@ -158,7 +184,14 @@ class users_page extends page{
                         <h3>Group memberships</h3>
                     </div>
                 </div>
-
+                
+                <?php
+                self::add_group_form($c_user);
+                
+                $g_list = new ajax_list($c_user->list_groups(), 'group_list');
+                $g_list->display();
+                ?>
+                
                 <!-- Permissions edit section -->
                 <div class="row">
                     <div class="col-lg-12 col-sm-12">
@@ -169,7 +202,7 @@ class users_page extends page{
                 <!-- Individual permissions -->
                 <div class="row">
                     <div class="col-lg-12 col-sm-12">
-                        <h4>User individual permissions</h4>
+                        <h4>Individual permissions</h4>
                     </div>
                 </div>
                 <?php
@@ -182,7 +215,7 @@ class users_page extends page{
                 <!-- All permissions -->
                 <div class="row">
                     <div class="col-lg-12 col-sm-12">
-                        <h4>All user/group permissions</h4>
+                        <h4>All inherited permissions</h4>
                     </div>
                 </div>
                 <?php            
@@ -194,6 +227,7 @@ class users_page extends page{
                 echo "<div class=\"alert alert-danger\" role=\"alert\">Username \"{$_GET['id']}\" not recognised</div>";
             }
         }else{
+            //ADD USER
             //PAGE: All Users
             
             //Add new user
@@ -215,7 +249,9 @@ class users_page extends page{
                 } catch (Exception $ex) {
                     echo "<div class=\"alert alert-danger\" role=\"alert\">{$ex->getMessage()}</div>";
                 }
+                
             }else if(isset($_GET['delete'])){
+                //DELETE USER
                 
                 //User object to delete
                 $d_user = new user($_GET['delete']);
@@ -341,6 +377,34 @@ class users_page extends page{
         $html = '';
         foreach($permissions as $code => $name){
             $html .= "<option value=\"$code\">$name</option>";
+        }
+        return $html;
+    }
+    
+    public static function add_group_form($user){
+        ?>
+        <div class="row">
+            <form method="POST" action="./?p=users&id=<?= $user->username ?>">
+                <div class="col-lg-10 col-sm-12">
+                    <select class="form-control" name="group_id" >
+                        <?= self::select_groups() ?>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-sm-12">
+                    <button type="submit" class="btn btn-success form-control">Add</button>
+                </div>
+            </form>
+        </div>
+        
+        <?php
+    }
+    
+    public static function select_groups(){
+        global $permissions;
+        
+        $html = '';
+        foreach(group::list_all_raw() as $group){
+            $html .= "<option value=\"{$group['group_id']}\">{$group['group_name']}</option>";
         }
         return $html;
     }
