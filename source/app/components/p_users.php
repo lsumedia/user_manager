@@ -158,7 +158,7 @@ class users_page extends page{
                         <input type="url" class="form-control" id="user-dp" placeholder="Profile picture URL"  name="dp_url" value="<?= $c_user->raw->dp_url ?>">
                     </div>
                     <div class="form-group">
-                        <label for="user-bio">Biography</label>
+                        <label for="user-bio">Bio</label>
                         <textarea class="form-control" name="bio" id="user-bio"><?= $c_user->bio ?></textarea>
                     </div>
                     <div class="form-group">
@@ -245,6 +245,11 @@ class users_page extends page{
                 //Create new user and write to object
                 try{
                     $new_user = user::add_user($new_username, $new_fullname, $new_email, $new_dp_url, $new_bio, $new_password);
+                    
+                    if(isset($_POST['group']) && $_POST['group'] > 0 ){
+                        $new_user->add_group($_POST['group']);
+                    }
+                    
                     echo "<div class=\"alert alert-success\" role=\"alert\">Added new user {$new_user->username}</div>";
                 } catch (Exception $ex) {
                     echo "<div class=\"alert alert-danger\" role=\"alert\">{$ex->getMessage()}</div>";
@@ -333,8 +338,14 @@ class users_page extends page{
                     <input type="url" class="form-control" id="user-dp" placeholder="Profile picture URL"  name="dp_url" value="<?= $c_user->dp_url ?>">
                 </div>
                 <div class="form-group">
-                    <label for="user-bio">Biography</label>
+                    <label for="user-bio">Bio</label>
                     <textarea class="form-control" name="bio" id="user-bio"><?= $c_user->bio ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="user-group">Add to group</label>
+                    <select class="form-control" name="group" id="user-group" >
+                        <?= self::select_groups() ?>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="user-pw">Password*</label>

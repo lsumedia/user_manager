@@ -40,7 +40,8 @@ class authenticator{
         return $config;
     }
     
-    
+    /** Create authenticator object
+     */
     public function __construct() {
         session_start();
         $this->check_login();
@@ -267,7 +268,7 @@ class authenticator{
         bottom:50px;
         right:50px;
         box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-        font-family: Roboto, Arial, sans-serif;
+        font-family: Arial, sans-serif;
     }
     .authenticator_bug_main p{
         margin:0;
@@ -306,7 +307,8 @@ class authenticator{
     }
     .authenticator_bug_fullname{
         font-weight:500;
-        font-size:1.15em;
+        font-size:18px;
+        line-height:22px;
     }
     .authenticator_bug_username{
         color:#aaa;

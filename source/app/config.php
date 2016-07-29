@@ -68,15 +68,20 @@ $permissions = [
     
     'label_submit_content' => 'Label: Submit content',
     'label_edit_content' => 'Label: Edit content',
-    'label_site_admin' => 'Label: Site administration'
+    'label_site_admin' => 'Label: Site administration',
+    
+    /* Hall Media */
+    
+    'falk_egg' => 'Hall Media: Falkner Eggington'
 ];
 
 
 /* Default permissions a user has on creation */
 $default_permissions = [
+    /*
     'upload_media',
     'lcr_submit_content',
     'lsutv_submit_content',
     'lens_submit_content',
-    'label_submit_content'
+    'label_submit_content' */
 ];
