@@ -285,7 +285,7 @@ class users_page extends page{
 ?>
 <div class="row">
     <div class="col-lg-12 col-sm-12">
-        <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#new_user_modal">Add user</button>
+        <button class="btn btn-success pull-right" data-toggle="modal" data-target="#new_user_modal">Add user</button>
     </div>
 </div>
 
@@ -326,7 +326,7 @@ class users_page extends page{
                     <input type="text" class="form-control" id="user-username" placeholder="Username"  name="username" value="<?= $c_user->username ?>">
                 </div>
                 <div class="form-group">
-                    <label for="user-fullname">Full name*</label>
+                    <label for="user-fullname">Full name</label>
                     <input type="text" class="form-control" id="user-email" placeholder="Full name" name="fullname" value="<?= $c_user->fullname ?>">
                 </div>
                 <div class="form-group">
@@ -354,7 +354,7 @@ class users_page extends page{
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Add new user</button>
+              <button type="submit" class="btn btn-success">Add new user</button>
             </div>
         </form>
     </div>
