@@ -361,7 +361,7 @@ class user{
         global $db;
         
         //If user isn't in the group and the group exists
-        if(!$this->in_group($perm_name) && (new group($group_id) !== false)){
+        if(!$this->in_group($group_id) && (new group($group_id) !== false)){
             //Add permission
             $query = "INSERT INTO " . prefix('user_group') . " (username,group_id) VALUES (?,?)";
             

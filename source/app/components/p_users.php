@@ -208,8 +208,11 @@ class users_page extends page{
                 <?php
                 self::add_permission_form($c_user);
                 
-                $i_list = new ajax_list($c_user->list_individual_permissions(), 'i_perm_list');
-                $i_list->display();
+                $individual_perms = $c_user->list_individual_permissions();
+                if(count($individual_perms) > 0){
+                    $i_list = new ajax_list($c_user->list_individual_permissions(), 'i_perm_list');
+                    $i_list->display();
+                }
                 ?>
 
                 <!-- All permissions -->
