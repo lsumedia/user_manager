@@ -102,6 +102,13 @@ class group {
         return $this->members;
     }
     
+    public function has_permission($perm_name){
+        if(in_array($perm_name, $this->permissions)){
+            return true;
+        }
+        return false;
+    }
+    
     public static function list_all_raw(){
         global $db;
         $query = "SELECT group_id, group_name, description FROM " . prefix('group');
@@ -137,5 +144,16 @@ class group {
         }
         
         return $objs;
+    }
+    
+    public static function list_all_clean(){
+        $raw = self::list_all_raw();
+        $clean = [];
+        
+        foreach($raw as $one){
+            $clean[] = ['Group name' => $one['group_name'], 'Group description' => $one['description'], 'action' => './?p=groups&id=' . $one['group_id']];
+        }
+        
+        return $clean;
     }
 }
