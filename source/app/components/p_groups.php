@@ -28,7 +28,7 @@ class group_page extends page{
             </div>
             <?php
             
-            
+            self::edit_group_form($e_group);
             
             
         }else{
@@ -50,6 +50,22 @@ class group_page extends page{
     }
     
     public static function edit_group_form($group){
-        
+        ?>
+        <div class="row">
+            <form method="POST" action="./?p=groups&id=<?= $group->group_id ?>" class="col-lg-12 col-sm-12">
+                <div class="form-group">
+                    <label for="group_name">Group name</label>
+                    <input type="text" class="form-control" name="group_name" value="<?= $group->group_name ?>" id="group_name"/>
+                </div>
+                <div class="form-group">
+                    <label for="group_dec">Group description</label>
+                    <input type="text" class="form-control" name="description" value="<?= $group->description ?>" id="group_desc"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success pull-right">Save changes</button>
+                </div>
+            </form>
+        </div>    
+        <?php
     }
 }
