@@ -154,7 +154,14 @@ class group_page extends page{
         $description = $_POST['description'];
         $permissions = $_POST['permissions'];
         
+        
+        
         try{
+            
+            //Validate group name length
+            if(strlen($group_name) < 3){
+                throw new Exception("Please enter a group name at least 3 characters long");
+            }
             
             $n_group = group::new_group($group_name, $description, $permissions);
             echo "<div class=\"alert alert-success\" role=\"alert\">Added new group {$n_group->group_name}</div>";

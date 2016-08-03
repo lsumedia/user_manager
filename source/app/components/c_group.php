@@ -72,7 +72,7 @@ class group {
         $group = new group($db->insert_id);
         
         foreach($permissions as $perm_name){
-            $group->add_perm($perm_name);
+            $group->add_permission($perm_name);
         }
         
         return $group;
@@ -254,11 +254,11 @@ class group {
     }
     
     public static function list_all_clean(){
-        $raw = self::list_all_raw();
+        $raw = self::list_all_objects();
         $clean = [];
         
         foreach($raw as $one){
-            $clean[] = ['Group name' => $one['group_name'], 'Group description' => $one['description'], 'action' => './?p=groups&id=' . $one['group_id']];
+            $clean[] = ['Group name' => $one->group_name, 'Group description' => $one->description, 'Permissions' => substr(implode($one->permissions,', '), 0, 50) . '...', 'action' => './?p=groups&id=' . $one->group_id];
         }
         
         return $clean;
