@@ -19,7 +19,7 @@ class group_page extends page{
             <!-- Breadcrumbs -->
             <ol class="breadcrumb">
               <li><a href="./?p=groups">Groups</a></li>
-              <li><a href="./?p=groupss&id=<?= $group_id ?>">Edit <?= $e_group->group_name ?></a></li>
+              <li><a href="./?p=groups&id=<?= $group_id ?>">Edit <?= $e_group->group_name ?></a></li>
             </ol>
             <div class="row">
                 <div class="col-lg-12 col-sm-12">
@@ -29,8 +29,14 @@ class group_page extends page{
             <?php
             
             if(isset($_POST['group_name'])){
-                
-                self::group_update_script($e_group);
+                try{
+                    self::group_update_script($e_group);
+                    echo "<div class=\"alert alert-success\" role=\"alert\">Updated {$e_group->group_name}</div>";
+
+                }catch(Exception $e){
+                    echo "<div class=\"alert alert-danger\" role=\"alert\">{$e->getMessage()}</div>";
+
+                }
                 
             }
             
@@ -58,7 +64,7 @@ class group_page extends page{
     public static function edit_group_form($group){
         ?>
         <div class="row">
-            <form method="POST" action="./?p=groups&id=<?= $group->group_id ?>" class="col-lg-12 col-sm-12">
+            <form method="POST" action="./?p=groups&debug&id=<?= $group->group_id ?>" class="col-lg-12 col-sm-12">
                 <div class="form-group">
                     <label for="group_name">Group name</label>
                     <input type="text" class="form-control" name="group_name" value="<?= $group->group_name ?>" id="group_name"/>
@@ -99,6 +105,8 @@ class group_page extends page{
     }
     
     public static function group_update_script($group){
+        global $db;
+        
         
         $group_id = $_GET['id'];
         $group_name = $_POST['group_name'];
@@ -109,11 +117,16 @@ class group_page extends page{
         $remove_permissions = array_diff($group->get_permissions(), $permissions);
         $add_permissions = array_diff($permissions, $group->get_permissions());
         
-        echo "<br />Remove:<br />";
-        var_dump($remove_permissions);
-        echo "<br />Add:<br />";
-        var_dump($add_permissions);
-        echo "<br />Check:<br />";
-        var_dump($permissions);        
+        foreach($remove_permissions as $remove_one_perm){
+            $group->remove_permission($remove_one_perm);
+        }
+        
+        foreach($add_permissions as $add_one_perm){
+            $group->add_permission($add_one_perm);
+        }     
+        
+        //Update name & description
+        $group->update_info($group_name, $description);
+
     }
 }

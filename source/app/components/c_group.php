@@ -95,10 +95,16 @@ class group {
     
     
     public function get_permissions(){
+        if($this->permissions == null){
+            return [];
+        }
         return $this->permissions;
     }
     
     public function get_members(){
+        if($this->members == null){
+            return [];
+        }
         return $this->members;
     }
     
@@ -107,6 +113,78 @@ class group {
             return true;
         }
         return false;
+    }
+    
+    public function add_permission($perm_name){
+        global $db;
+        global $permissions;
+        
+        //If group does not already have this permission
+        if(!$this->has_permission($perm_name) && array_key_exists($perm_name, $permissions)){
+            //Add permission
+            $query = "INSERT INTO " . prefix('group_perm') . " (group_id,perm_name) VALUES (?,?)";
+            
+            if($stmt = $db->prepare($query)){
+                $stmt->bind_param("is", $this->group_id, $perm_name);
+                if($stmt->execute()){
+                    $stmt->close();
+                    $this->fetch_permissions();
+                    return true;
+                }else{
+                    throw new Exception($stmt->error);
+                }
+                $stmt->close();
+            }else{
+                throw new Exception($db->error);
+            }
+        }
+        throw new Exception("Group already has permission or permission \"{$perm_name}\" is not valid");
+        return false;
+    }
+    
+    public function remove_permission($perm_name){
+        global $db;
+        
+        $query = "DELETE FROM " . prefix('group_perm') . " WHERE group_id = ? AND perm_name = ?";
+        
+        if($stmt = $db->prepare($query)){
+            $stmt->bind_param("is", $this->group_id, $perm_name);
+            if($stmt->execute()){
+               
+                if($stmt->affected_rows > 0){
+                    $stmt->close();
+                    $this->fetch_permissions();
+                    return true;
+                }else{
+                    throw new Exception("Permission \"$perm_name\" not removed from $this->group_id - unknown error");
+                }
+            }
+            $stmt->close();
+        }
+        throw new Exception("Failed to remove permission $perm_name");
+        return false;
+    }
+    
+    public function update_info($group_name, $description){
+        global $db;
+        
+        $query = "UPDATE " . prefix('group') . " SET group_name = ?, description = ? WHERE group_id = ?";
+        
+        if($stmt = $db->prepare($query)){
+            
+            $stmt->bind_param('ssi', $group_name, $description, $this->group_id);
+            
+            if($stmt->execute()){
+                $this->group_name = $group_name;
+                $this->description = $description;
+                $stmt->close();
+            }else{
+                $stmt->close();
+                throw new Exception("Updating group info failed - " . $stmt->error);
+            }
+        }else{
+            throw new Exception("Error - " . $db->error);
+        }
     }
     
     public static function list_all_raw(){
