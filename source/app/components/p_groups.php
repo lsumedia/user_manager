@@ -42,11 +42,28 @@ class group_page extends page{
             
             self::edit_group_form($e_group);
             
+            try{
+                
+                $member_list = new ajax_list($e_group->list_members_clean(), "member_list");
+                $member_list->display("Members");
+                
+            }catch(Exception $e){
+                
+                echo "<div class=\"alert alert-danger\" role=\"alert\">{$e->getMessage()}</div>";
+            
+                
+            }
+            
             
         }else{
             
             if(isset($_GET['new'])){
                 self::group_add_script();
+            }
+            
+            if(isset($_GET['delete'])){
+                $del_id = $_GET['delete'];
+                group::delete_group($del_id);
             }
             
             ?>
@@ -91,8 +108,14 @@ class group_page extends page{
                     <p>Group permissions</p>
                 </div>
                 <?php self::group_permission_options($group) ?>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-success pull-right">Save changes</button>
+                <div class="form-group">                    
+                    <button 
+                        type="button" 
+                        class="btn btn-danger pull-right" 
+                        onclick="if(confirm('Delete group <?= $group->group_id ?>?')){ window.location.href='./?p=groups&delete=<?= $group->group_id ?>';}">
+                        Delete group
+                    </button>
+                    <button type="submit" class="btn btn-success pull-right" style="margin-right:4px">Save changes</button>
                 </div>
             </form>
         </div>    
@@ -152,7 +175,7 @@ class group_page extends page{
         
         $group_name = $_POST['group_name'];
         $description = $_POST['description'];
-        $permissions = $_POST['permissions'];
+        $permissions = $_POST['permission'];
         
         
         

@@ -78,6 +78,22 @@ class group {
         return $group;
     }
     
+    public static function delete_group($group_id){
+        global $db;
+        
+        $safe_id = $db->real_escape_string($group_id);
+        
+        //Delete user query
+        $del_query_1 = "DELETE FROM " . prefix('group') . " WHERE group_id = '{$safe_id}'";
+        $del_query_2 = "DELETE FROM " . prefix('group_perm') . " WHERE group_id = '{$safe_id}'";
+        $del_query_3 = "DELETE FROM " . prefix('user_group') . " WHERE group_id = '{$safe_id}'";
+
+        if($db->query($del_query_1) && $db->query($del_query_2) && $db->query($del_query_3)){
+            echo "<div class=\"alert alert-success\" role=\"alert\">Deleted group {$safe_id}</div>";
+        }else{
+             echo "<div class=\"alert alert-danger\" role=\"alert\">Error deleting group: $db->error</div>";
+        }
+    }    
     
     public function fetch_permissions(){
         global $db;
@@ -120,6 +136,28 @@ class group {
                 $this->members[] = $username;
             }
         }
+    }
+    
+    public function list_members_clean(){
+        global $db;
+        
+        $query = "SELECT u.username, u.fullname, u.email FROM " . prefix('user_group') . " AS ug,  " . prefix('user') . " AS u WHERE ug.group_id=? AND ug.username=u.username";
+        if($stmt2 = $db->prepare($query)){
+            $stmt2->bind_param('i', $this->group_id);
+
+            $stmt2->execute();
+            $stmt2->bind_result($username, $fullname, $email);
+
+            $clean = [];
+            
+            while($stmt2->fetch()){
+                $clean[] = ['Username' => $username, "Full name" => $fullname, "Email" => $email, "action" => "./?p=users&id={$username}"];
+            }
+            
+            return $clean;
+        }
+        throw new Exception($db->error);
+        return false;
     }
     
     
