@@ -49,6 +49,35 @@ class group {
         
     }
     
+    public static function new_group($group_name, $description, $permissions){
+        global $db;
+        
+        $query = "INSERT INTO " . prefix('group') . " (group_name, description) VALUES (?,?)";
+        
+        if($stmt = $db->prepare($query)){
+            $stmt->bind_param('ss', $group_name, $description);
+            if($stmt->execute()){
+                $stmt->close();
+            }else{
+                $stmt->close();
+                throw new Exception("Error adding new user - " . $stmt->error);
+                return false;
+            }
+        }else{
+            throw new Exception($db->error);
+            return false;
+        }
+        
+        //Get new group object
+        $group = new group($db->insert_id);
+        
+        foreach($permissions as $perm_name){
+            $group->add_perm($perm_name);
+        }
+        
+        return $group;
+    }
+    
     
     public function fetch_permissions(){
         global $db;

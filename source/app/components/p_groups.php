@@ -44,12 +44,26 @@ class group_page extends page{
             
             
         }else{
+            
+            if(isset($_GET['new'])){
+                self::group_add_script();
+            }
+            
+            ?>
+<div class="row">
+    <div class="col-lg-12 col-sm-12">
+        <button class="btn btn-success pull-right" data-toggle="modal" data-target="#new_group_modal">Add group</button>
+    </div>
+</div>
+            <?php
             //List groups
             
             $groups = group::list_all_clean();
             
             $group_list = new ajax_list($groups, "group_list");
             $group_list->display();
+            
+            self::new_group_modal();
         }
         
         
@@ -64,7 +78,7 @@ class group_page extends page{
     public static function edit_group_form($group){
         ?>
         <div class="row">
-            <form method="POST" action="./?p=groups&debug&id=<?= $group->group_id ?>" class="col-lg-12 col-sm-12">
+            <form method="POST" action="./?p=groups&id=<?= $group->group_id ?>" class="col-lg-12 col-sm-12">
                 <div class="form-group">
                     <label for="group_name">Group name</label>
                     <input type="text" class="form-control" name="group_name" value="<?= $group->group_name ?>" id="group_name"/>
@@ -91,7 +105,11 @@ class group_page extends page{
         foreach($permissions as $perm_name => $perm_title){
             
             if($perm_name != 'super_admin' && $perm_name != 'manage_users'){
-                $checked = ($group->has_permission($perm_name))? 'checked' : '';
+                if($group == null){
+                    $checked = '';
+                }else{
+                    $checked = ($group->has_permission($perm_name))? 'checked' : '';
+                }
                 ?>
                 <div class="checkbox">
                     <label>
@@ -129,4 +147,57 @@ class group_page extends page{
         $group->update_info($group_name, $description);
 
     }
+    
+    public static function group_add_script(){
+        
+        $group_name = $_POST['group_name'];
+        $description = $_POST['description'];
+        $permissions = $_POST['permissions'];
+        
+        try{
+            
+            $n_group = group::new_group($group_name, $description, $permissions);
+            echo "<div class=\"alert alert-success\" role=\"alert\">Added new group {$n_group->group_name}</div>";
+
+        }catch(Exception $e){
+            echo "<div class=\"alert alert-danger\" role=\"alert\">{$e->getMessage()}</div>";
+        }
+        
+    }
+    
+        public static function new_group_modal(){
+        ?>
+        <!-- Modal -->
+<div class="modal fade" id="new_group_modal" tabindex="-1" role="dialog" aria-labelledby="new_group_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <form action="./?p=groups&new" method="POST">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="new_group_modal_label">Add group</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="group_name">Group name</label>
+                    <input type="text" class="form-control" id="group_name" placeholder="Group name"  name="group_name" value="">
+                </div>
+                <div class="form-group">
+                    <label for="group_description">Group description</label>
+                    <input type="text" class="form-control" id="group_description" placeholder="Group description" name="description" value="">
+                </div>
+                <div class="form-group">
+                    <?php self::group_permission_options(null) ?>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success">Add new group</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<?php
+    }
+
 }
