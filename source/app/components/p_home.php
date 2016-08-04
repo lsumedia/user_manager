@@ -3,14 +3,16 @@
 class dashboard_page extends page{
 
     public $name = 'dashboard';
-    public $title = 'Quick View';
+    public $title = 'Overview';
     
     public function content() {
        ?>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="panel panel-default">
-            <div class="panel-heading">Sessions</div>
+            <div class="panel-heading">
+                <a href="./?p=sessions">Sessions</a>
+            </div>
             <div class="panel-body">
                 <?php
                     $sess_data = access_key::list_all_clean(20);
@@ -22,7 +24,9 @@ class dashboard_page extends page{
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="panel panel-default">
-            <div class="panel-heading">Users</div>
+            <div class="panel-heading">
+                <a href="./?p=users">Users</a>
+            </div>
             <div class="panel-body">
                 <?php
                 $u_data = user::list_all();
@@ -34,7 +38,9 @@ class dashboard_page extends page{
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="panel panel-default">
-            <div class="panel-heading">Groups</div>
+            <div class="panel-heading">
+                <a href="./?p=groups">Groups</a>
+            </div>
             <div class="panel-body">
                  <?php
                     $g_data = group::list_all_clean();

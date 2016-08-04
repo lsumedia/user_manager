@@ -333,12 +333,25 @@ class authenticator{
     }
     
     /* Non-authentication SSO data functions */
+    
+    /* Get public data for SSO users */
     public static function server_get_users(){
         $config = self::config();
         
         $srv_addr = $config['server_address'];
         
         $api_url = $srv_addr . '?public_user_data';
+        
+        return json_decode(file_get_contents($api_url),true);
+    }
+    
+    /* Get all SSO groups */
+    public static function server_get_groups(){
+        $config = self::config();
+        
+        $srv_addr = $config['server_address'];
+        
+        $api_url = $srv_addr . '?public_group_data';
         
         return json_decode(file_get_contents($api_url),true);
     }

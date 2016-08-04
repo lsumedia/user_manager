@@ -105,6 +105,14 @@ textarea{
     resize:vertical;
 }
 
+.panel-left{
+    float:left;
+    
+}
+
+.panel-right{
+    float:right;
+}
 @media(screen) and (max-width:799px){
     main{
         width:100%;
@@ -112,5 +120,9 @@ textarea{
     }
     .form_row input{
         width:auto;
+    }
+    .panel-left, .panel-right{
+        float:none;
+        width:100%;
     }
 }

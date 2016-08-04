@@ -31,6 +31,8 @@ $auth = new authenticator();
 
 $profile = $auth->profile();
 
+$groups = authenticator::server_get_groups();
+
 //Display success message
 if(isset($_GET['updated'])){ ?>
     <div class="form_row success">
@@ -102,15 +104,34 @@ if(isset($_GET['badpassword'])){ ?>
     </div>
 </form>
 
-<!-- Permissions info section -->
-<div class="form_row">
-    <h4>Your permissions</h4>
+
+<div class="panel-left">
+    <!-- Permissions info section -->
+    <div class="form_row">
+        <h4>Your groups</h4>
+    </div>
+    <ul>
+        <?php
+        foreach($profile['group_ids'] as $group_id){
+            echo "<li>{$groups[$group_id]['group_name']}</li>";
+        }
+        ?>
+    </ul>
+    </div>
 </div>
-<ul>
-    <?php
-    foreach($profile['permissions'] as $permission){
-        echo "<li>{$permissions[$permission]}</li>";
-    }
-    ?>
-</ul>
+
+<div class="panel-right">
+    <!-- Permissions info section -->
+    <div class="form_row">
+        <h4>Your permissions</h4>
+    </div>
+    <ul>
+        <?php
+        foreach($profile['permissions'] as $permission){
+            echo "<li>{$permissions[$permission]}</li>";
+        }
+        ?>
+    </ul>
+    </div>
 </div>
+

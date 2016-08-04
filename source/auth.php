@@ -73,6 +73,18 @@ if(isset($_GET['check_key'])){
      */
     
     $response = user::list_public_raw();
+    
+}else if(isset($_GET['public_group_data'])){
+    /**
+     * Return basic data for all SSO groups
+     * 
+     * Array contains:
+     * 
+     * group_id
+     * group_name
+     * description
+     */
+    $response = group::list_all_raw();
 }
 
 echo json_encode($response);
