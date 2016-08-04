@@ -19,32 +19,12 @@ $action = $_GET['action'];
 switch($action){
  
     case 'login':
+        //Login script
         
         $username = $_POST['username'];
         $password = $_POST['password'];
         $redirect = $_POST['redirect'];
         
-        /*
-        
-        $hash = process_password($password);
-        
-        $query = "SELECT username FROM " . prefix('user') . " WHERE (username=? OR email=?) AND password=?";
-        
-        $stmt = $db->prepare($query);
-        $stmt->bind_param('sss',$username,$username,$hash);
-        $stmt->execute();
-        
-        $stmt->bind_result($safe_username);
-        
-        if($stmt->fetch()){
-            //make key
-        }else{
-            header('location:./auth/?p=login&error&redirect=' . $redirect);
-            die();
-        }
-        
-        $stmt->close();
-         */
         try{
             
             $user = new user($username);
@@ -78,8 +58,6 @@ switch($action){
         $r_var = (strpos($redirect, "?") == false)? '?' : '&';
 
         $return_full = $redirect . $r_var . "key=" . $key;
-        
-        //echo $return_full;
         
         header('location:' . $return_full);
         die();
@@ -140,5 +118,16 @@ switch($action){
         
         
         header('location:./auth/?p=profile&error');
+        break;
+    case 'register':
+        
+        if($config['registration']['open_registration'] == true){
+            
+            header('location:./auth/?p=login');
+            
+        }else{
+            header('location:./auth/?p=registere&error=not_allowed');
+        }
+        
         break;
 }
