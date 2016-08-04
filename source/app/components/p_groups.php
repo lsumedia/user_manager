@@ -44,8 +44,9 @@ class group_page extends page{
             
             try{
                 
+                echo "<label>Group members</label>";
                 $member_list = new ajax_list($e_group->list_members_clean(), "member_list");
-                $member_list->display("Members");
+                $member_list->display();
                 
             }catch(Exception $e){
                 
