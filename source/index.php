@@ -45,7 +45,7 @@ $page_loader->load_page_by_name($page_id);
     
     <body>
         
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -59,9 +59,9 @@ $page_loader->load_page_by_name($page_id);
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><a href=".">Home</a></li>
-            <li><a href=".?p=users">Users</a></li>
-            <li><a href=".?p=sessions">Sessions</a></li>
+            <li><a href=".?p=users">Users</a></li>            
             <li><a href=".?p=groups">Groups</a></li>
+            <li><a href=".?p=sessions">Sessions</a></li>
           </ul>
         </div>
       </div>
