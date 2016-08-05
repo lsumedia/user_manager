@@ -296,7 +296,14 @@ class group {
         $clean = [];
         
         foreach($raw as $one){
-            $clean[] = ['Group name' => $one->group_name, 'Group description' => $one->description, 'Permissions' => substr(implode($one->permissions,', '), 0, 50) . '...', 'action' => './?p=groups&id=' . $one->group_id];
+            $p_imp = implode($one->permissions,', ');
+            $p_string = (strlen($p_imp) > 50)? substr($p_imp, 0, 50) . '...' : $p_imp; 
+            $clean[] = [
+                'Group name' => $one->group_name, 
+                'Group description' => $one->description, 
+                'Permissions' => $p_string,
+                'action' => './?p=groups&id=' . $one->group_id
+                ];
         }
         
         return $clean;
