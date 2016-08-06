@@ -83,5 +83,6 @@ $default_permissions = [
     'lcr_submit_content',
     'lsutv_submit_content',
     'lens_submit_content',
-    'label_submit_content' */
+    'label_submit_content' 
+    */
 ];
