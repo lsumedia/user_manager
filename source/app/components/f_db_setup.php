@@ -4,7 +4,7 @@ class db_model{
     
     
     public function configure(){
-        //user
+        global $db;
     
         $user_tbl_name = prefix('user');
         
@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `{$user_tbl_name}` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 END;
+
     
         //user_perm
         
@@ -86,15 +87,33 @@ CREATE TABLE IF NOT EXISTS `{$key_tbl_name}` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 END;
         
+    //Run 
+    if($db->query($user_query) &&
+        $db->query($user_perm_query) &&
+        $db->query($group_query) &&
+        $db->query($group_perm_query) &&
+        $db->query($user_group_query) &&
+        $db->query($key_query)){
+        return true;
+    }else{
+        throw new Exception($db->error);
     }
+    
+    }
+    
+   
 
     /**
      * check_configuration
      * 
      * Check if the database is correctly configured. Should be run at some point
      * on load and notify the user if the configuration is wrong
+     * 
+     * return TRUE if configured
+     * FALSE if not configured
      */
     public function check_configuration(){
+        global $db;
         
         /* Tests the database table by table. Potentially kinda slow, so should not
          * be run if the active user is logged in (implying database works)
@@ -102,20 +121,7 @@ END;
         
         $user_query = "SHOW TABLES LIKE " . prefix('user');
         
-        
-        
-        $user_perm_query = "SHOW TABLES LIKE " . prefix('user_permission');
-        
-        
-        
-        $group_query = "SHOW TABLES LIKE " . prefix('group');
-        
-        
-        
-        $group_perm_query = "SHOW TABLES LIKE " . prefix('group_permission');
-        
-        
-        $access_key_query = "SHOW TABLES LIKE " . prefix('access_key');
+        $res = $db->query($user_query);
         
     }
     
