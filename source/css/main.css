@@ -4,6 +4,15 @@ main{
     padding:20px;
 }
 
+nav{
+    background-color:#4a1863;
+    color:white;
+}
+
+a{
+    color:inherit;
+}
+
 /* jsonlist styles for Bootstrap*/
 .listnav{
     float:right;
