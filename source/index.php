@@ -35,7 +35,8 @@ $page_loader->load_page_by_name($page_id);
         <title>LSU Media User Manager</title>
         
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="css/materialize.min.css" />
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
         <link rel="stylesheet" href="css/main.css" />
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>        
@@ -43,8 +44,8 @@ $page_loader->load_page_by_name($page_id);
     </head>
     
     <body>
-        
-    <!-- <nav class="navbar navbar-fixed-top">
+    
+    <nav class="navbar navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
           <a class="navbar-brand" href=".">User Manager</a>
@@ -58,21 +59,6 @@ $page_loader->load_page_by_name($page_id);
           </ul>
         </div>
       </div>
-    </nav>-->
-        
-    <nav>
-        <div class="nav-wrapper container white-text" >
-            <div class="brand-logo">
-                <!-- <img src="res/media_reverse.png" /> -->
-                <p>User Manager</p>
-            </div>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href=".">Home</a></li>
-            <li><a href=".?p=users">Users</a></li>            
-            <li><a href=".?p=groups">Groups</a></li>
-            <li><a href=".?p=sessions">Sessions</a></li>
-            </ul>
-        </div>
     </nav>
 
         <main class="container">
