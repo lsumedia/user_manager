@@ -20,12 +20,16 @@ class users_page extends page{
             
             ?>
             <!-- Breadcrumbs -->
-            <ol class="breadcrumb">
-              <li><a href="./?p=users">Users</a></li>
-              <li><a href="./?p=users&id=<?= $_GET['id'] ?>">Edit <?= $_GET['id'] ?></a></li>
-            </ol>
+            <nav class="crumbs">
+                <div class="nav-wrapper">
+                    <div class="col s12">
+                        <a href="./?p=users" class="breadcrumb">Users</a>
+                        <a href="./?p=users&id=<?= $_GET['id'] ?>" class="breadcrumb">Edit <?= $_GET['id'] ?></a>
+                    </div>
+                </div>
+            </nav>
             <div class="row">
-                <div class="col-lg-12 col-sm-12">
+                <div class="col s12">
                     <h3>Edit profile</h3>
                 </div>
             </div>
@@ -141,46 +145,46 @@ class users_page extends page{
                 ?>
                 <!-- Edit user form -->
                 <form action="" method="POST" autocomplete="off" id="edit_user_form">
-                    <div class="form-group">
+                    <div class="input-field">
                         <label for="user-username">Username</label>
                         <input type="text" class="form-control disabled" id="user-username" readonly placeholder="Username"  name="username" value="<?= $c_user->username ?>">
                     </div>
-                    <div class="form-group">
+                    <div class="input-field">
                         <label for="user-fullname">Full name</label>
                         <input type="text" class="form-control" id="user-email" placeholder="Full name" name="fullname" value="<?= $c_user->fullname ?>">
                     </div>
-                    <div class="form-group">
+                    <div class="input-field">
                         <label for="user-email">Email address</label>
                         <input type="email" class="form-control" id="user-email" placeholder="Email address" name="email" value="<?= $c_user->email ?>">
                     </div>
-                    <div class="form-group">
+                    <div class="input-field">
                         <label for="user-dp">Profile picture (leave blank to use Gravatar)</label>
                         <input type="url" class="form-control" id="user-dp" placeholder="Profile picture URL"  name="dp_url" value="<?= $c_user->raw->dp_url ?>">
                     </div>
-                    <div class="form-group">
+                    <div class="input-field">
+                        <textarea class="materialize-textarea form-control" name="bio" id="user-bio"><?= $c_user->bio ?></textarea>
                         <label for="user-bio">Bio</label>
-                        <textarea class="form-control" name="bio" id="user-bio"><?= $c_user->bio ?></textarea>
                     </div>
-                    <div class="form-group">
+                    <div class="input-field">
                         <label for="user-pw">Reset password</label>
                         <input type="password" class="form-control" id="user-pw" name="reset_password" placeholder="Password reset" autocomplete="off">
                     </div>
                 </form>
                 <div class="row">
-                    <div class="col-lg-12 col-sm-12">
+                    <div class="col s12">
                         <?php 
                             //Don't display button to delete user's own account
                             if($c_user->username != $auth->profile()['username']){
                         ?>
-                            <button class="btn btn-danger pull-right" onclick="if(confirm('Delete user <?= $c_user->username ?>?')){ window.location.href='./?p=users&delete=<?= $c_user->username ?>';}">Delete user</button>
+                            <button class="btn red right" onclick="if(confirm('Delete user <?= $c_user->username ?>?')){ window.location.href='./?p=users&delete=<?= $c_user->username ?>';}">Delete user</button>
                             <?php }else{ ?>            
-                        <button class="btn btn-default disabled pull-right">Delete user</button>
+                        <button class="btn blue disabled right">Delete user</button>
                             <?php } ?>
-                        <button type="submit" class="btn btn-success pull-right" style="margin-right:4px;" onclick="document.getElementById('edit_user_form').submit();">Save changes</button>
+                        <button type="submit" class="btn green right" style="margin-right:4px;" onclick="document.getElementById('edit_user_form').submit();">Save changes</button>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12 col-sm-12">
+                    <div class="col s12">
                         <h3>Group memberships</h3>
                     </div>
                 </div>
@@ -194,14 +198,14 @@ class users_page extends page{
                 
                 <!-- Permissions edit section -->
                 <div class="row">
-                    <div class="col-lg-12 col-sm-12">
+                    <div class="col s12">
                         <h3>Permissions</h3>
                     </div>
                 </div>
 
                 <!-- Individual permissions -->
                 <div class="row">
-                    <div class="col-lg-12 col-sm-12">
+                    <div class="col s12">
                         <h4>Individual permissions</h4>
                     </div>
                 </div>
@@ -217,7 +221,7 @@ class users_page extends page{
 
                 <!-- All permissions -->
                 <div class="row">
-                    <div class="col-lg-12 col-sm-12">
+                    <div class="col s12">
                         <h4>All inherited permissions</h4>
                     </div>
                 </div>
@@ -324,33 +328,33 @@ class users_page extends page{
               <h4 class="modal-title" id="new_user_modal_label">Add user</h4>
             </div>
             <div class="modal-body">
-                <div class="form-group">
+                <div class="input-field">
                     <label for="user-username">Username*</label>
                     <input type="text" class="form-control" id="user-username" placeholder="Username"  name="username" value="<?= $c_user->username ?>">
                 </div>
-                <div class="form-group">
+                <div class="input-field">
                     <label for="user-fullname">Full name</label>
                     <input type="text" class="form-control" id="user-email" placeholder="Full name" name="fullname" value="<?= $c_user->fullname ?>">
                 </div>
-                <div class="form-group">
+                <div class="input-field">
                     <label for="user-email">Email address*</label>
                     <input type="email" class="form-control" id="user-email" placeholder="Email address" name="email" value="<?= $c_user->email ?>">
                 </div>
-                <div class="form-group">
+                <div class="input-field">
                     <label for="user-dp">Profile picture (leave blank to use Gravatar)</label>
                     <input type="url" class="form-control" id="user-dp" placeholder="Profile picture URL"  name="dp_url" value="<?= $c_user->dp_url ?>">
                 </div>
-                <div class="form-group">
+                <div class="input-field">
                     <label for="user-bio">Bio</label>
                     <textarea class="form-control" name="bio" id="user-bio"><?= $c_user->bio ?></textarea>
                 </div>
-                <div class="form-group">
+                <div class="input-field">
                     <label for="user-group">Add to group</label>
                     <select class="form-control" name="group" id="user-group" >
                         <?= self::select_groups() ?>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="input-field">
                     <label for="user-pw">Password*</label>
                     <input type="password" class="form-control" id="user-pw" name="password" placeholder="Password">
                 </div>

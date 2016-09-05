@@ -35,8 +35,7 @@ $page_loader->load_page_by_name($page_id);
         <title>LSU Media User Manager</title>
         
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="css/bootstrap.min.css" />
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
+        <link rel="stylesheet" href="css/materialize.min.css" />
         <link rel="stylesheet" href="css/main.css" />
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>        
@@ -45,15 +44,9 @@ $page_loader->load_page_by_name($page_id);
     
     <body>
         
-    <nav class="navbar navbar-fixed-top">
-      <div class="container-fluid">
+    <!-- <nav class="navbar navbar-fixed-top">
+      <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
           <a class="navbar-brand" href=".">User Manager</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -65,12 +58,27 @@ $page_loader->load_page_by_name($page_id);
           </ul>
         </div>
       </div>
+    </nav>-->
+        
+    <nav>
+        <div class="nav-wrapper container white-text" >
+            <div class="brand-logo">
+                <!-- <img src="res/media_reverse.png" /> -->
+                <p>User Manager</p>
+            </div>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href=".">Home</a></li>
+            <li><a href=".?p=users">Users</a></li>            
+            <li><a href=".?p=groups">Groups</a></li>
+            <li><a href=".?p=sessions">Sessions</a></li>
+            </ul>
+        </div>
     </nav>
 
         <main class="container">
             <?php if(strlen($page_loader->current_page_name()) > 0){ ?>
             <div class="page-header">
-                <h1><?= $page_loader->current_page_name() ?></h1>
+                <h3><?= $page_loader->current_page_name() ?></h3>
             </div>
             <?php } ?>
             <?php $page_loader->load_content(); ?>
