@@ -11,6 +11,21 @@ main{
     user-select:none;
 }
 
+a{
+    color:inherit;
+}
+
+.navbar{
+    background-color:#4a1863;
+}
+
+.navbar-nav li{
+    color:white;
+}
+.white-text{
+    color:white;
+}
+
 .listnav p{
     float:left;
 }

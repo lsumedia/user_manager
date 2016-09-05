@@ -54,10 +54,10 @@ $page_loader->load_page_by_name($page_id);
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href=".">User Manager</a>
+          <a class="navbar-brand white-text" href=".">User Manager</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
+          <ul class="nav navbar-nav navbar-right white-text">
             <li><a href=".">Home</a></li>
             <li><a href=".?p=users">Users</a></li>            
             <li><a href=".?p=groups">Groups</a></li>
