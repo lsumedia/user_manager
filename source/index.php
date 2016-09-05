@@ -44,10 +44,16 @@ $page_loader->load_page_by_name($page_id);
     </head>
     
     <body>
-    
+        
     <nav class="navbar navbar-fixed-top">
-      <div class="container">
+      <div class="container-fluid">
         <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
           <a class="navbar-brand" href=".">User Manager</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -64,7 +70,7 @@ $page_loader->load_page_by_name($page_id);
         <main class="container">
             <?php if(strlen($page_loader->current_page_name()) > 0){ ?>
             <div class="page-header">
-                <h3><?= $page_loader->current_page_name() ?></h3>
+                <h1><?= $page_loader->current_page_name() ?></h1>
             </div>
             <?php } ?>
             <?php $page_loader->load_content(); ?>

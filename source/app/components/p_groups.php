@@ -69,8 +69,8 @@ class group_page extends page{
             
             ?>
 <div class="row">
-    <div class="col s12">
-        <button class="btn green right" data-toggle="modal" data-target="#new_group_modal">Add group</button>
+    <div class="col-lg-12 col-sm-12">
+        <button class="btn btn-success pull-right" data-toggle="modal" data-target="#new_group_modal">Add group</button>
     </div>
 </div>
             <?php
@@ -135,10 +135,11 @@ class group_page extends page{
                     $checked = ($group->has_permission($perm_name))? 'checked' : '';
                 }
                 ?>
-                <p>
-                    <input type="checkbox" id="group_<?= $perm_name ?>" name="permission[]" value="<?= $perm_name ?>" <?= $checked ?>/>
-                    <label for="group_<?= $perm_name ?>"><?= $perm_title ?></label>
-                </p>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="group_<?= $perm_name ?>" name="permission[]" value="<?= $perm_name ?>" <?= $checked ?>/><?= $perm_title ?>
+                    </label>
+                </div>
                 <?php
             }
         }
@@ -187,10 +188,10 @@ class group_page extends page{
             }
             
             $n_group = group::new_group($group_name, $description, $permissions);
-            echo "<div class=\"card-panel green\" role=\"alert\">Added new group {$n_group->group_name}</div>";
+            echo "<div class=\"alert alert-success\" role=\"alert\">Added new group {$n_group->group_name}</div>";
 
         }catch(Exception $e){
-            echo "<div class=\"card-panel red\" role=\"alert\">{$e->getMessage()}</div>";
+            echo "<div class=\"alert alert-danger\" role=\"alert\">{$e->getMessage()}</div>";
         }
         
     }

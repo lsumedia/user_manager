@@ -1,19 +1,7 @@
-html{
-    overlow-y:scroll;
-}
 
 main{
     margin-top:50px;
     padding:20px;
-}
-
-nav{
-    background-color: #4a1863;
-}
-
-.crumbs{
-    background-color:grey;
-    padding-left:20px;
 }
 
 /* jsonlist styles for Bootstrap*/
@@ -28,19 +16,4 @@ nav{
 }
 .listnav i{
     cursor:pointer;
-}
-
-a{
-    color:inherit;
-}
-
-
-.brand-logo img{
-    height:86%;
-    float:left;
-}
-.brand-logo p{
-    float:left;
-    margin:0;
-    margin-left:10px;   
 }
