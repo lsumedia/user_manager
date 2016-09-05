@@ -319,7 +319,7 @@ class user{
                
                 if($stmt->affected_rows > 0){
                     $stmt->close();
-                    $thos->fetch_permissions();
+                    $this->fetch_permissions();
                     return true;
                 }else{
                     throw new Exception("Permission \"$perm_name\" not removed from $this->username - unknown error");
