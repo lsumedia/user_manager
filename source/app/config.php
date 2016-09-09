@@ -27,6 +27,10 @@ $config = [
     /* Dashboard to redirect to if no login redirect provided */
     'dashboard_address' => '',
     
+    
+    /* Image for login screen background */
+    'login_background' => 'http://grovestreet.me/media_server/files/f1ca07.jpg?width=1920',
+    
 ];
 
 

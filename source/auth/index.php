@@ -1,20 +1,32 @@
+<?php
+require_once('../app/config.php');
+?>
 <html>
     <head>
         <title>LSU Media SSO</title>
-        <link rel="stylesheet" href="../css/bootstrap.min.css" />
-        <link rel="stylesheet" href="../css/bootstrap-theme.min.css" />
+        <link rel="stylesheet" href="css/materialize.min.css" />
         <link rel="stylesheet" href="css/style.css" />
+        <script src="js/materialize.min.js" ></script>
         
-        <script src="../js/bootstrap.min.js" ></script>
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
     </head>  
     <body>
-        <nav>
-            <img src="res/media_logo.png" alt="Media Logo" />
-            <p>Single-Sign-On</p>
-        </nav>
-        <main>
         <?php
-            $page = $_GET['p'];
+        $page = $_GET['p'];
+        if($page != 'login'){
+        ?>
+        <nav>
+            <div class="nav-wrapper container white-text" >
+                <div class="brand-logo">
+                    <img src="res/media_reverse.png" />
+                    <p>Single Sign-On</p>
+                </div>
+            </div>
+        </nav>
+        <?php } ?>
+        <main class="container">
+        <?php
+            
             switch($page){
                 case 'login':
                     include('php/login.php');

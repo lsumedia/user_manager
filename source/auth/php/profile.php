@@ -25,7 +25,6 @@
  */
 
 require_once('../app/components/authenticator.php');
-require_once('../app/config.php');
 
 $auth = new authenticator();
 
