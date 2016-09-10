@@ -45,6 +45,9 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[SCRIPT_NAME]";
                 <!-- <input type="submit" class="btn-flat right" value="Sign in"/> -->
                 <a>&nbsp;</a><!-- lord forgive me-->
                 <a class="right blue-text" href="javascript:void(0);" onclick="document.getElementById('login_form').submit()">Sign In</a>
+                <?php if($config['registration']['open_registration'] == true){ ?>
+                    <a class="right blue-text" href="./?p=register">Register</a>
+                <?php } ?>
             </div>
             <input type="hidden" value="<?= $_GET['redirect'] ?>" name="redirect" />
         </form>

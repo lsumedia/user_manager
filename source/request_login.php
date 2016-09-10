@@ -126,7 +126,7 @@ switch($action){
             header('location:./auth/?p=login');
             
         }else{
-            header('location:./auth/?p=registere&error=not_allowed');
+            header('location:./auth/?p=register&error=not_allowed');
         }
         
         break;

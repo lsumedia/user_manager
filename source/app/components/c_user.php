@@ -267,6 +267,13 @@ class user{
         return false;
     }
     
+    public function has_individual_permission($perm_name){
+        if(in_array($perm_name, $this->raw->permissions)){
+            return true;
+        }
+        return false;
+    }
+    
     /** Remove permission from users
      * 
      * true if succeeded, false if failed
@@ -279,7 +286,7 @@ class user{
         global $permissions;
         
         //If user does not already have this permission
-        if(!$this->has_permission($perm_name) && array_key_exists($perm_name, $permissions)){
+        if(!$this->has_individual_permission($perm_name) && array_key_exists($perm_name, $permissions)){
             //Add permission
             $query = "INSERT INTO " . prefix('user_perm') . " (username,perm_name) VALUES (?,?)";
             

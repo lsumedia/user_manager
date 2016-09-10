@@ -6,6 +6,9 @@ require_once('../app/config.php');
         <title>LSU Media SSO</title>
         <link rel="stylesheet" href="css/materialize.min.css" />
         <link rel="stylesheet" href="css/style.css" />
+        
+        <!--Import jQuery before materialize.js-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
         <script src="js/materialize.min.js" ></script>
         
         <meta name="viewport" content="width=device-width, user-scalable=no" />
@@ -13,7 +16,7 @@ require_once('../app/config.php');
     <body>
         <?php
         $page = $_GET['p'];
-        if($page != 'login'){
+        if($page != 'login' && $page != 'register'){
         ?>
         <nav>
             <div class="nav-wrapper container white-text" >

@@ -29,7 +29,7 @@ $config = [
     
     
     /* Image for login screen background */
-    'login_background' => 'http://grovestreet.me/media_server/files/f1ca07.jpg?width=1920',
+    'login_background' => 'http://grovestreet.me/media_server/files/39a57f.jpg?width=1920',
     
 ];
 

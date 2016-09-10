@@ -68,69 +68,74 @@ if(isset($_GET['badpassword'])){ ?>
 <div class="form_row">
     <h4>Edit profile</h4>
 </div>
-<form action="../request_login.php?action=update_profile" method="POST">
-    <div class="form_row">
-        <p>Username</p>
-        <input type="text" class="disabled" readonly value="<?= $profile['username'] ?>" />
-    </div>
-    <div class="form_row">
-        <p>Display name</p>
-        <input type="text" name="fullname" value="<?= $profile['fullname'] ?>" />
-    </div>
-    <div class="form_row">
-        <p>Email</p>
-        <input type="email" name="email" value="<?= $profile['email'] ?>" />
-    </div>
-    <div class="form_row">
-        <p>Profile picture URL (Leave blank to use Gravatar)</p>
-        <input type="url" name="dp_url" value="<?= $profile['raw']['dp_url'] ?>" />
-    </div>
-    <div class="form_row">
-        <p>Biography</p>
-    </div>
-    <textarea name="bio" ><?= $profile['bio'] ?></textarea>
+<form action="../request_login.php?action=update_profile" method="POST" class="row" autocomplete="false">
     
+    <div class="col s12">
+        <label for="username_field">Username</label>
+        <input id="username_field" type="text" class="disabled" readonly value="<?= $profile['username'] ?>" />
+    </div>
+    <div class="col s12">
+        <label for="name_field">Display name</label>
+        <input id="name_field" type="text" name="fullname" value="<?= $profile['fullname'] ?>" />
+    </div>
+    <div class="col s12">
+        <label for="email_field">Email</label>
+        <input id="email_field" type="email" name="email" value="<?= $profile['email'] ?>" />
+    </div>
+    <div class="col s12">
+        <label for="dpurl_field">Profile picture URL (Leave blank to use Gravatar)</label>
+        <input autocomplete="off" id="dp_url_field" type="url" name="dp_url" value="<?= $profile['raw']['dp_url'] ?>" />
+    </div>
+    <div class="input-field col s12">
+        <textarea class="materialize-textarea" id="bio" name="bio" ><?= $profile['bio'] ?></textarea>
+        <label for="bio">Biography</label>
+    </div>
+
     <!-- Password change section -->
-    <div class="form_row border"></div>
-    <div class="form_row">
-            <p>New password</p>
-            <input type="password" name="password" />
+    <div class="col s12 border"></div>
+    <div class="col s12">
+            <label for="password_field">New password</label>
+            <input id="password_field" type="text" name="password" onfocus="this.type = 'password'; //Prevent autocomplete"/>
     </div>
     
     <input type="hidden" name="key" value="<?= $auth->key ?>" />
-    <div class="form_row">
-        <input type="submit" value="Save changes"/>
+    <div class="col s12">
+        <input class="btn green" type="submit" value="Save changes"/>
     </div>
 </form>
 
-
-<div class="panel-left">
-    <!-- Permissions info section -->
-    <div class="form_row">
-        <h4>Your groups</h4>
+<div class="row">
+    <div class="col s12 m6 l6">
+        <!-- Permissions info section -->
+        <div class="form_row">
+            <h4>Your groups</h4>
+        </div>
+        <ul>
+            <?php
+            foreach($profile['group_ids'] as $group_id){
+                echo "<li>{$groups[$group_id]['group_name']}</li>";
+            }
+            ?>
+        </ul>
     </div>
-    <ul>
-        <?php
-        foreach($profile['group_ids'] as $group_id){
-            echo "<li>{$groups[$group_id]['group_name']}</li>";
-        }
-        ?>
-    </ul>
+
+    <div class="col s12 m6 l6">
+        <!-- Permissions info section -->
+        <div class="form_row">
+            <h4>Your permissions</h4>
+        </div>
+        <ul>
+            <?php
+            foreach($profile['permissions'] as $permission){
+                echo "<li>{$permissions[$permission]}</li>";
+            }
+            ?>
+        </ul>
     </div>
 </div>
 
-<div class="panel-right">
-    <!-- Permissions info section -->
-    <div class="form_row">
-        <h4>Your permissions</h4>
-    </div>
-    <ul>
-        <?php
-        foreach($profile['permissions'] as $permission){
-            echo "<li>{$permissions[$permission]}</li>";
-        }
-        ?>
-    </ul>
-    </div>
-</div>
-
+<script>
+$(document).ready(function(){
+   $('#bio').trigger('autoresize'); 
+});
+</script>
